@@ -2,6 +2,8 @@
 # -*- CPerl -*-
 # $Id$
 
+# 登録/更新用 CGI
+
 use strict;
 use CGI qw/:standard/;
 use CGI::Carp 'fatalsToBrowser';
@@ -78,7 +80,7 @@ EOF
 <p>
 <input type="submit" value=" 登 録 ">
 </p>
-<p>※ 必須入力項目です。</p>
+<p>$conf::REQ_MARK は必須入力項目を示します。</p>
 </form>
 EOF
 }
@@ -90,7 +92,7 @@ sub param2form(@) {
     for my $entry (@parameter) {
 	next if $conf::PARAM_TYPES{$entry} =~ /^external/o;
 	$retstr .= "<tr><td>$conf::PARAM_LABELS{$entry}";
-	$retstr .= " ※" if defined $conf::REQ_PARAMETERS{$entry};
+	$retstr .= " $conf::REQ_MARK" if defined $conf::REQ_PARAMETERS{$entry};
 	$retstr .= "</td><td>";
 	my @type = split(/:/, $conf::PARAM_TYPES{$entry});
 	if ($type[0] eq 'textfield') {

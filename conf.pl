@@ -6,27 +6,26 @@ package conf;
 ### 全般の設定
 
 # 担当者のメールアドレス
-$FROM = 'hasegawa@ulis.ac.jp';
+$FROM = 'yuka@ulis.ac.jp';
 
 # ページのタイトル
-$TITLE = '数値解析シンポジウムメール案内登録';
+$TITLE = 'データベース情報の登録/更新';
 
 # ホームページの URL
-$HOME_URL = 'http://phase.hpcc.jp/nas/';
+$HOME_URL = 'http://nile.ulis.ac.jp/~masao/dbxml/';
 
 # ホームページのタイトル
-$HOME_TITLE = '第31回数値解析シンポジウム (NAS2002)';
+$HOME_TITLE = 'データベース情報共有プロジェクト';
 
 # フォームの先頭に書く注意事項（HTML）
 $NOTE = <<EOF;
 <p>
-次からメールによる案内をご希望の方はご登録ください。
-参加申し込みではありません。
+データベースに関する情報を登録・更新します。
 </p>
 EOF
 
-# 登録内容を記録するCSVファイル: `chmod a+w $FILENAME`しておくこと。
-$FILENAME = "annai.csv";
+# 必須項目を示すマーク（HTML）
+$REQ_MARK = '<span class="req-mark">※</span>';
 
 # 登録内容を記録するディレクトリ名: `chmod a+w $DATADIR`しておくこと。
 $DATADIR = 'data';
@@ -35,7 +34,7 @@ $DATADIR = 'data';
 $USE_MAIL = 0;
 
   # メール通知する場合の Subject: （非ASCIIは使えない）
-  $SUBJECT = 'NAS2002 registration';
+  $SUBJECT = '[DB Metadata]';
 
 ### HTML の <form> 部品の定義
 
@@ -63,13 +62,15 @@ $USE_MAIL = 0;
 #
 # 「external」は登録時に動的に情報を追加したい場合に用いる。
 #
-%PARAM_TYPES = ('name' => 'textfield:40', 'post' => 'textfield:40',
-		'e-mail' => 'textfield:40', 'note' => 'textarea:4:50',
+%PARAM_TYPES = ('name' => 'textfield:40',
+		'post' => 'textfield:40',
+		'e-mail' => 'textfield:40',
+		'note' => 'textarea:4:50',
 		'date' => 'external:scalar localtime()',
 		'contact' => 'nest:contact_name:address:phone',
-		'contact_name' => 'textfield',
-		'address' => 'textfield',
-		'phone' => 'textfield',
+		'contact_name' => 'textfield:40',
+		'address' => 'textfield:40',
+		'phone' => 'textfield:40',
 		'keyword' => 'textfield:50',
 	       );
 
@@ -81,7 +82,7 @@ $USE_MAIL = 0;
 # 処理終了時のメッセージ（HTML）の先頭部分
 $REPORT_HEADER = <<EOF;
 <p>
-数値解析シンポジウムへの案内申し込みありがとうございます。
+データベース情報の登録ありがとうございました。
 </p>
 <p>
 登録内容は以下の通りです。<br>
@@ -108,15 +109,15 @@ $HTML_HEADER = <<EOF;
 <title>$TITLE</title>
 </head>
 <body>
-<center>
 <h1>$TITLE</h1>
 EOF
 
 # HTMLの最後の部分
 $HTML_FOOTER = <<EOF;
-</center>
 <hr>
-<a href="$HOME_URL">$HOME_TITLE</a>
+<address>
+<a href="$HOME_URL">$HOME_TITLE</a> / <a href="mailto:$FROM">$FROM</a>
+</address>
 </body>
 </html>
 EOF
