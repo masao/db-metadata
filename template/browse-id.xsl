@@ -28,11 +28,11 @@
       <xsl:apply-templates select="//subject" />
       <xsl:apply-templates select="//lang" />
       <tr>
-        <td bgcolor="#aaddaa">収録範囲</td>
+        <td bgcolor="#aaddaa">収録期間</td>
         <td><xsl:value-of select="//period"/></td>
       </tr>
       <tr>
-        <td bgcolor="#aaddaa">件数</td>
+        <td bgcolor="#aaddaa">収録件数</td>
         <td><xsl:value-of select="//total"/></td>
       </tr>
       <tr>
@@ -42,6 +42,10 @@
       <tr>
         <td bgcolor="#aaddaa">更新件数</td>
         <td><xsl:value-of select="//interval_num"/></td>
+      </tr>
+      <tr>
+        <td bgcolor="#aaddaa">収録情報の地域</td>
+        <td><xsl:value-of select="//region"/></td>
       </tr>
       <tr>
         <td bgcolor="#aaddaa">システム</td>
@@ -65,11 +69,27 @@
         <td bgcolor="#aaddaa">利用条件</td>
         <td><xsl:value-of select="//condition"/></td>
       </tr>
+      <tr>
+        <td bgcolor="#aaddaa">データ提供形態</td>
+        <td><xsl:value-of select="//format"/></td>
+      </tr>
       <xsl:apply-templates select="//contributor" />
       <tr>
         <td bgcolor="#aaddaa">登録者</td>
         <td>
           <a href="personal.cgi?userid={//userid}"><xsl:value-of select="//userid"/></a>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#aaddaa">作成日</td>
+        <td>
+          <xsl:value-of select="//created_date"/>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#aaddaa">更新日</td>
+        <td>
+          <xsl:value-of select="//update_date"/>
         </td>
       </tr>
     </table>
