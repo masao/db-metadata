@@ -239,11 +239,10 @@ sub param2report (@) {
 }
 
 sub get_id() {
-    my $i = 0;
-    while (-f sprintf("$conf::DATADIR/%04.xml", $i)) {
-        $i++;
-    }
-    return sprintf("%04d", $i);
+    my @files = util::pickup_files();
+    my ($num) = $files[$#files] =~ /(\d+)\.xml$/;
+    $num++;
+    return sprintf("%04d", $num);
 }
 
 # For avoiding "used only once: possible typo at ..." warnings.
