@@ -1,4 +1,9 @@
-1. テスト方法 「make」するとgenform.cgiのテストができます。
+1. 作成されるcsvファイルの文字コード
+
+なんの加工（変換）もせずに、書き出しています。
+基本的にはEUC-JPになっているはずです。
+
+2. テスト方法 「make」するとgenform.cgiのテストができます。
 
 テスト成功例）
 
@@ -24,7 +29,7 @@ Failed 1/1 test scripts, 0.00% okay. 5/6 subtests failed, 16.67% okay.
 make: *** [test] Error 11
 %
 
-2. テストに失敗した場合 「perl -c ./conf.pl」 を実行してみて下さい。
+3. テストに失敗した場合 「perl -c ./conf.pl」 を実行してみて下さい。
 
 例）40行目に「,」を忘れていた場合
 
