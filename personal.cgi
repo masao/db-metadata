@@ -45,6 +45,7 @@ sub main {
 		);
     print $tmpl->output;
 }
+
 sub addgroup_form () {
     my $retstr = "";
     if ($user eq $userid) {
@@ -72,7 +73,8 @@ sub my_grouplist() {
 	}
     }
     foreach my $id (@mygroups) {
-	$retstr .= "<div><span style=\"font-weight:bold;font-size:larger;\">". $info{$id}->{'name'} ."</span>\n";
+	$retstr .= "<div><span style=\"font-weight:bold;font-size:larger;\">";
+	$retstr .= "<a href=\"./browse.cgi?scan=group;search=$id\">". $info{$id}->{'name'} ."</a></span>\n";
 	if ($user eq $userid) {
 	    $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
 	}
