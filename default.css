@@ -1,0 +1,7 @@
+h1 { text-align: center; }
+
+p.error {
+  background-color: pink;
+  padding: 2px;
+  border: thin solid gray;
+}

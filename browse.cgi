@@ -127,6 +127,9 @@ sub exec_xslt($$%) {
     require XML::LibXML;
     require XML::LibXSLT;
 
+    return "<p class=\"error\">データファイルが読み込めません。</p>"
+	unless -r $xmlsrc;
+
     my $parser = new XML::LibXML;
     my $xslt = new XML::LibXSLT;
 
