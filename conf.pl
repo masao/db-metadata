@@ -10,7 +10,7 @@ $FROM = 'yuka@ulis.ac.jp';
 $TITLE = 'データベース情報の登録/更新';
 
 # ホームページの URL
-$HOME_URL = 'http://nile.ulis.ac.jp/~masao/test/dbxml/';
+$HOME_URL = 'http://nile.ulis.ac.jp/~yuka/db-template/top.html';
 
 # ホームページのタイトル
 $HOME_TITLE = 'データベース情報共有プロジェクト';
@@ -38,6 +38,7 @@ $ROOT_ELEMENT = 'データベース';
 		 'e-mail' => 'E-mail',# メール通知する場合は必要（宛先）
 		 'url' => 'URL',
 
+		 'dbid' => 'データベースID',
 		 'dbname' => 'データベース名',
 		 'dbname_yomi' => 'データベース名・ヨミ',
 		 'system' => 'システム名',
