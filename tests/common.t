@@ -7,7 +7,7 @@ use Test;
 
 BEGIN { plan test => 12 }
 
-my @scripts = ("./genform.cgi", "./search.cgi");
+my @scripts = ("./genform.cgi", "./browse.cgi");
 
 for my $cgi (@scripts) {
     # syntax ¡©
