@@ -37,7 +37,7 @@ $USE_MAIL = 0;
 ### HTML の <form> 部品の定義
 
 # フォーム部品のラベル（名前）
-%PARAM_LABELS = ('name' => '名前'
+%PARAM_LABELS = ('name' => '名前',
 		 'post' => '所属',
 		 'e-mail' => 'E-mail',# メール通知する場合は必要（宛先）
 		 'note' => '通信',
