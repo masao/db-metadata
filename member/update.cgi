@@ -15,67 +15,15 @@ use lib "..";
 require 'util.pl';
 require 'conf.pl';	# 設定内容を読み込む
 
+
 main();
 sub main {
-    if (defined(param())) {
-	my $error = '';
-	for my $entry (keys %conf::REQ_PARAMETERS) { # 必須項目のエラー処理
-	    if (!defined(param($entry)) || !length(param($entry))) {
-		$error .= "<p>エラー: 「<font color=\"red\">$conf::PARAM_LABELS{$entry}</font>」は必須項目です。</p>\n";
-	    } elsif ($entry eq "e-mail" && param($entry) !~ /\S+@\S+/) {
-		$error .= "<p>エラー: 「<font color=\"red\">$conf::PARAM_LABELS{$entry}</font>」が正しくありません。</p>\n";
-	    }
-	}
-	if (length($error)) {
-	    print header();
-	    my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
-	    $tmpl->param('TITLE' => $conf::TITLE,
-			 'HOME_TITLE' => $conf::HOME_TITLE,
-			 'HOME_URL' => $conf::HOME_URL,
-			 'FROM' => $conf::FROM,
-			 'SCRIPT_NAME' => script_name(),
-			 'USER' => remote_user(),
-			 'ERROR' => $error,
-			 'FORM_CONTROL' => param2form(@conf::PARAMETERS),
-			 'REQ_MARK' => $conf::REQ_MARK,
-			);
-	    print $tmpl->output;
-	    exit;
-	}
-
-	my $xml = <<EOF;
-<?xml version="1.0" encoding="EUC-JP"?>
-<$conf::ROOT_ELEMENT>
-EOF
-	$xml .= param2xml(@conf::PARAMETERS);
-	$xml .= "</$conf::ROOT_ELEMENT>\n";
-
-	# データを登録する
-	my $id = get_id();
-	my $xmlfile = sprintf("$conf::DATADIR/%04d.xml", $id);
-	my $fh = util::fopen(">$xmlfile");
-	print $fh $xml;
-	$fh->close;
-
-	my $report = param2report(@conf::PARAMETERS);
-	my $tmpl = HTML::Template->new('filename' => '../template/report.tmpl');
-	$tmpl->param('TITLE' => $conf::TITLE,
-		     'HOME_TITLE' => $conf::HOME_TITLE,
-		     'HOME_URL' => $conf::HOME_URL,
-		     'FROM' => $conf::FROM,
-		     'USER' => remote_user(),
-		     'REPORT' => $report,
-		    );
-	print header();
-	print $tmpl->output;
-
-	if ($conf::USE_MAIL) {
-	    my $msg = util::html2txt($report);
-	    util::send_mail($conf::FROM, param('e-mail'), $conf::SUBJECT,
-			    param('name'), $msg);
-	}
-    } else {
-	print header();
+    if (defined(param('submit'))) {	# 登録処理
+	
+    } elsif (defined(param('id'))) {	# 更新用フォーム生成
+	
+    } else {				# 新規登録フォーム生成
+	print header("text/html; charset=utf-8");
 	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
 	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
@@ -83,11 +31,11 @@ EOF
 		     'FROM' => $conf::FROM,
 		     'SCRIPT_NAME' => script_name(),
 		     'USER' => remote_user(),
-		     # 'ERROR' => $error,
 		     'FORM_CONTROL' => param2form(@conf::PARAMETERS),
 		     'REQ_MARK' => $conf::REQ_MARK,
 		    );
 	print $tmpl->output;
+	# print param2form(@conf::PARAMETERS);
     }
 }
 
@@ -96,28 +44,38 @@ sub param2form(@) {
     my (@parameter) = (@_);
     my $retstr = '';
     for my $entry (@parameter) {
-	next if $conf::PARAM_TYPES{$entry} =~ /^external/o;
-	$retstr .= "<tr><td>$conf::PARAM_LABELS{$entry}";
-	$retstr .= " $conf::REQ_MARK" if defined $conf::REQ_PARAMETERS{$entry};
-	$retstr .= "</td><td>";
-	my @type = split(/:/, $conf::PARAM_TYPES{$entry});
-	if ($type[0] eq 'textfield') {
-	    my $size = $type[1];
-	    $retstr .= "<input type=\"text\" name=\"$entry\" value=\"";
-	    $retstr .= CGI::escapeHTML(param($entry)) if defined param($entry);
-	    $retstr .= "\"";
-	    $retstr .= " size=\"$size\"" if defined $size;
-	    $retstr .= ">";
-	    if (defined $conf::PARAM_REPEATABLES{$entry}) {
-		$retstr .= "<br><small>複数の項目を登録する場合は、コンマで区切って入れてください。<br>例: $conf::PARAM_LABELS{$entry}1,$conf::PARAM_LABELS{$entry}2,$conf::PARAM_LABELS{$entry}3</small>";
-	    }
-	} elsif ($type[0] eq 'textarea') {
-	    my $rows = $type[1];
-	    my $cols = $type[2];
-	    $retstr .= "<textarea name=\"$entry\" rows=\"$rows\" cols=\"$cols\">";
-	    $retstr .= CGI::escapeHTML(param($entry)) if defined param($entry);
-	    $retstr .= "</textarea>";
-	} elsif ($type[0] eq 'radio') {
+       my @type = split(/:/, $conf::PARAM_TYPES{$entry});
+       if ($type[0] eq "external") {
+	   next;
+       } elsif ($type[0] eq 'hidden') {
+           $retstr .= "<input type=\"hidden\" name=\"$entry\" value=\"";
+           $retstr .= CGI::escapeHTML(param($entry)) if defined param($entry);
+           $retstr .= "\">\n";
+	   next;
+       }
+
+       $retstr .= "<tr><th>$conf::PARAM_LABELS{$entry}";
+       $retstr .= " $conf::REQ_MARK" if defined $conf::REQ_PARAMETERS{$entry};
+       $retstr .= "</th><td>";
+
+       if ($type[0] eq 'textfield') {
+           my $size = $type[1];
+           $retstr .= "<input type=\"text\" name=\"$entry\" value=\"";
+           $retstr .= CGI::escapeHTML(param($entry)) if defined param($entry);
+           $retstr .= "\"";
+           $retstr .= " size=\"$size\"" if defined $size;
+           $retstr .= ">";
+           if (defined $conf::PARAM_REPEATABLES{$entry}) {
+               $retstr .= "<br><small>複数の項目を登録する場合は、コンマで区切って入れてください。<br>例: $conf::PARAM_LABELS{$entry}1,$conf::PARAM_LABELS{$entry}2,$conf::PARAM_LABELS{$entry}3</small>";
+           }
+       } elsif ($type[0] eq 'textarea') {
+           my $rows = $type[1];
+           my $cols = $type[2];
+           $retstr .= "<textarea name=\"$entry\" rows=\"$rows\" cols=\"$cols\">
+";
+           $retstr .= CGI::escapeHTML(param($entry)) if defined param($entry);
+           $retstr .= "</textarea>";
+       } elsif ($type[0] eq 'radio') {
             shift @type;
             foreach my $val (@type) {
                 $retstr .= "<input type=\"radio\" name=\"$entry\" value=\"$val\"";
@@ -126,13 +84,13 @@ sub param2form(@) {
                 }
                 $retstr .= ">". $conf::PARAM_LABELS{"$entry:$val"};
             }
-	} elsif ($type[0] eq "nest") {
-	    shift @type;
-	    $retstr .= "<table cellpadding=\"1\" border=\"1\" width=\"100%\">";
-	    $retstr .= param2form(@type);
-	    $retstr .= "</table>";
-	}
-	$retstr .= "</td></tr>\n";
+       } elsif ($type[0] eq "nest") {
+           shift @type;
+           $retstr .= "<table cellpadding=\"1\" border=\"1\" width=\"100%\">";
+           $retstr .= param2form(@type);
+           $retstr .= "</table>";
+       }
+       $retstr .= "</td></tr>\n";
     }
     return $retstr;
 }

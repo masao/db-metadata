@@ -8,7 +8,11 @@
 <link rel="stylesheet" href="default.css" type="text/css">
 </head>
 <body>
-<TMPL_UNLESS NAME=USER>
+<TMPL_IF NAME=USER>
+<div class="update">
+<a href="./update.cgi">[新規登録]</a>
+</div>
+<TMPL_ELSE>
 <div class="login"><a href="./member/">[ログイン]</a></div>
-</TMPL_UNLESS>
+</TMPL_IF>
 <h1><TMPL_VAR NAME=TITLE></h1>
