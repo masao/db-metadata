@@ -41,6 +41,7 @@ sub main {
 			 'FROM' => $conf::FROM,
 			 'SCRIPT_NAME' => script_name(),
 			 'USER' => remote_user(),
+			 'BASEDIR' => '..',
 			 'ERROR' => $error,
 			 'FORM_CONTROL' => param2form(@conf::PARAMETERS),
 			 'REQ_MARK' => $conf::REQ_MARK,
@@ -62,6 +63,7 @@ sub main {
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
 #		     'SCRIPT_NAME' => script_name(),
+		     'BASEDIR' => '..',
 		     'USER' => remote_user(),
 		     'DBID' => $id,
 		     'DBTITLE' => $Q::dbname,
@@ -85,6 +87,7 @@ sub main {
 		     'FROM' => $conf::FROM,
 		     'SCRIPT_NAME' => script_name(),
 		     'USER' => remote_user(),
+		     'BASEDIR' => '..',
 		     'FORM_CONTROL' => param2form_update($cont, @conf::PARAMETERS),
 		     'REQ_MARK' => $conf::REQ_MARK,
 		    );
@@ -98,6 +101,7 @@ sub main {
 		     'FROM' => $conf::FROM,
 		     'SCRIPT_NAME' => script_name(),
 		     'USER' => remote_user(),
+		     'BASEDIR' => '..',
 		     'FORM_CONTROL' => param2form(@conf::PARAMETERS),
 		     'REQ_MARK' => $conf::REQ_MARK,
 		    );
