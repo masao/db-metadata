@@ -19,6 +19,8 @@ require 'conf.pl';	# 設定内容を読み込む
 my $q = CGI->new();
 $q->import_names();
 
+my $user = $q->remote_user();
+
 main();
 sub main {
     if (defined($q->param('submit'))) {	# 登録処理
@@ -154,7 +156,7 @@ sub param2xml($) {
   <created_date>$date</created_date>
   <update_date>$date</update_date>
   <dbid>$id</dbid>
-  <userid>$Q::userid</userid>
+  <userid>$user</userid>
   <system>$Q::system</system>
   <system_yomi>$Q::system_yomi</system_yomi>
   <distributor>$Q::distributor</distributor>
