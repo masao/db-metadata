@@ -44,13 +44,18 @@ sub main {
     if (defined $id) {
 	my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse-id.tmpl");
 	my $content = exec_xslt("$conf::DATADIR/$id.xml", "$BASEDIR/template/browse-id.xsl");
+	my $updatable = 1 if
+	    defined($user) &&
+	    $user eq (util::get_tagvalues(util::readfile("$conf::DATADIR/$id.xml"), 'userid'))[0];
 	$tmpl->param('TITLE' => "データベース情報の閲覧",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
 		     'CONTENT' => $content,
 		     'USER' => $user,
-		     'ID' => $id);
+		     'UPDATABLE' => $updatable,
+		     'ID' => $id
+		    );
 	print $tmpl->output;
     } elsif (defined $scan) {
 	if (length($search)) {
