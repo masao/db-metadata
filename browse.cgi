@@ -302,7 +302,10 @@ sub group_list($) {
 		$retstr .= $group{$groupid}->{'user'} . "\">";
 		$retstr .= $group{$groupid}->{'user'} . "</a>";
 		$retstr .= ":<a href=\"?scan=group;search=$groupid\">";
-		$retstr .= $group{$groupid}->{'name'} ."</a>";
+		$retstr .= $group{$groupid}->{'name'} ."</a>\n";
+		if (length($group{$groupid}->{'description'})) {
+		    $retstr .= "- ". $group{$groupid}->{'description'};
+		}
 	    }
 	}
     }
