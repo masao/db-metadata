@@ -32,7 +32,7 @@ $FILENAME = "annai.csv";
 $USE_MAIL = 0;
 
   # メール通知する場合の Subject: （非ASCIIは使えない）
-  my $SUBJECT = 'NAS2002 registration';
+  $SUBJECT = 'NAS2002 registration';
 
 ### HTML の <form> 部品の定義
 
