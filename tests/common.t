@@ -5,7 +5,7 @@
 use strict;
 use Test;
 
-BEGIN { plan test => 12 }
+BEGIN { plan test => 16 }
 
 common_test("./browse.cgi");
 
@@ -14,6 +14,7 @@ $ENV{'REMOTE_USER'} = "masao";
 
 common_test("./browse.cgi");
 common_test("./update.cgi");
+common_test("./bbs.cgi");
 
 sub common_test($) {
     my ($cgi) = @_;

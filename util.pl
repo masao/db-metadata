@@ -17,6 +17,28 @@ sub pickup_files() {
     return @files;
 }
 
+# ã‚³ãƒ¡ãƒ³ãƒˆæƒ…å ±ã‚’å–ã‚Šå‡ºã—ã¦ãã‚‹
+sub bbs_list($) {
+    my ($id, $basedir) = @_;
+    return undef if not -f "$basedir/bbs/$id";
+    my $fh = util::fopen("$basedir/bbs/$id");
+    my $retstr = "";
+    my $i = 0;
+    while (defined(my $line = <$fh>)) {
+	my ($user, $date, $comment) = $line =~ /^([^\t]+)\t([^\t]+)\t(.*)$/;
+	$retstr .= <<EOF;
+<div class="comment">
+<a name="$i" href="#$i">ãƒ»</a>
+<span class="user"><a href="browse.cgi?scan=username;search=$user">$user</a></span>
+<span class="date">$date</span>
+<p class="comment">$comment</p>
+</div>
+EOF
+	$i++;
+    }
+    return $retstr;
+}
+
 sub write_csv($@) {
     my ($fname, @values) = @_;
     my $fh = fopen(">>$fname");
@@ -38,7 +60,7 @@ From: $from
 Subject: $subject
 To: $to
 
- $name ÍÍ
+ $name æ§˜
 
 $msg
 EOF
@@ -55,7 +77,7 @@ sub html2txt {
     return $result;
 }
 
-# ¥¿¥°¤ÎÆâÍÆ¤òÀµµ¬É½¸½¤Ç¶¯°ú¤Ë°ú¤ÃÄ¥¤Ã¤Æ¤¯¤ë
+# ã‚¿ã‚°ã®å†…å®¹ã‚’æ­£è¦è¡¨ç¾ã§å¼·å¼•ã«å¼•ã£å¼µã£ã¦ãã‚‹
 sub get_tagvalues($$) {
     my ($cont, $tagname) = @_;
     my @tmp = ();
@@ -63,7 +85,7 @@ sub get_tagvalues($$) {
     return @tmp;
 }
 
-# HTML¤Î¼ÂÂÎ»²¾È¤ò¹Ô¤Ê¤¦¡£
+# HTMLã®å®Ÿä½“å‚ç…§ã‚’è¡Œãªã†ã€‚
 sub escape_html($) {
     my ($str) = @_;
     return undef if not defined $str;
@@ -74,7 +96,7 @@ sub escape_html($) {
     return $str;
 }
 
-# ±øÀ÷¤µ¤ì¤Æ¤¤¤ëÊÑ¿ô¤ò¥­¥ì¥¤¤Ë¤¹¤ë¡£¡ÊCGI::Untaint ¤Î¥í¡¼¥«¥ë¼ÂÁõ¡Ë
+# æ±šæŸ“ã•ã‚Œã¦ã„ã‚‹å¤‰æ•°ã‚’ã‚­ãƒ¬ã‚¤ã«ã™ã‚‹ã€‚ï¼ˆCGI::Untaint ã®ãƒ­ãƒ¼ã‚«ãƒ«å®Ÿè£…ï¼‰
 sub untaint($$$) {
     my ($tainted, $pattern, $default) = (@_);
     # print "\$tainted: $tainted\t\$pattern: $pattern\t\$default:$default\n";
@@ -88,7 +110,7 @@ sub untaint($$$) {
     }
 }
 
-# ¸úÎ¨¤è¤¯¥Õ¥¡¥¤¥ë¤ÎÃæ¿È¤òÆÉ¤ß¹ş¤à¡£
+# åŠ¹ç‡ã‚ˆããƒ•ã‚¡ã‚¤ãƒ«ã®ä¸­èº«ã‚’èª­ã¿è¾¼ã‚€ã€‚
 sub readfile ($) {
     my ($fname) = @_;
     my $fh = fopen($fname);

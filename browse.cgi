@@ -55,7 +55,8 @@ sub main {
 		     'CONTENT' => $content,
 		     'USER' => $user,
 		     'UPDATABLE' => $updatable,
-		     'ID' => $id
+		     'ID' => $id,
+		     'BBS-LIST' => util::bbs_list($id, $BASEDIR),
 		    );
 	print $tmpl->output;
     } elsif (defined $scan) {

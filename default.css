@@ -22,3 +22,24 @@ div.navbar {
   text-align: right;
   font-size: larger;
 }
+
+div.comment {
+  border: thin solid silver;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+/* span.date { font-style: italic; } */
+span.user { font-weight: bold; }
+
+div.bbs-form {
+  border-left: 5px solid #ffaaaa;
+  border-right: 5px solid #ffaaaa;
+  border-top: thin solid #ffaaaa;
+  border-bottom: thin solid #ffaaaa;
+  padding: 5px;
+  margin-left: 2em;
+  margin-top: 0.5em;
+}
