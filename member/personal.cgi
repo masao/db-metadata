@@ -20,7 +20,11 @@ require 'conf.pl';	# 設定内容を読み込む
 my $q = CGI->new();
 my $cmd = $q->param('cmd');
 
-my $user = $q->remote_user();
+my $user = $q->param("userid");
+my $current_user = $q->remote_user();
+if (!defined($user)) {
+    $user = $current_user;
+}
 
 main();
 sub main {
@@ -33,12 +37,27 @@ sub main {
 		 'SCRIPT_NAME' => "browse.cgi",
 		 'USER' => $user,
 		 'BASEDIR' => '..',
+		 'ADDGROUP_FORM' => addgroup_form(),
 		 'MYGROUP' => my_grouplist(),
 		 'MYDB' => my_dblist(),
 		);
     print $tmpl->output;
 }
-
+sub addgroup_form () {
+    my $retstr = "";
+    if ($current_user eq $user) {
+	$retstr = <<EOF;
+<div class="addgroup-form">
+新規グループの登録： <form method="POST" action="./addgroup.cgi">
+<input type="hidden" name="cmd" value="newgroup">
+<input type="text"   name="name" value="" size="30">
+<input type="submit" name="submit" value=" 登 録 ">
+</form>
+</div>
+EOF
+    }
+    return $retstr;
+}
 sub my_grouplist() {
     my $retstr = '';
     my %info = util::get_groupinfo("../group.txt");
@@ -50,7 +69,9 @@ sub my_grouplist() {
     }
     foreach my $id (@mygroups) {
 	$retstr .= "<div><span style=\"font-weight:bold;font-size:larger;\">". $info{$id}->{'name'} ."</span>\n";
-	$retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
+	if ($current_user eq $user) {
+	    $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
+	}
 	$retstr .= "<ul>\n";
 	foreach my $subid (@{$info{$id}->{'list'}}) {
 	    $retstr .= "<li><a href=\"./browse.cgi?id=$subid\">" . util::get_dbname($subid) . "</a>\n";

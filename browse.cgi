@@ -157,6 +157,14 @@ sub scan_list(@) {
 	    $result .= $group{$key}->{'name'} ."</a>";
 	    $result .= " (". scalar(@{$group{$key}->{'list'}}) .")\n";
 	}
+    } elsif ($scan eq "userid") {
+	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
+	    die "tie fail: $scan.db: $!";
+	for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
+	    my $key = $list[$i];
+	    $result .= "<li><a href=\"./personal.cgi?userid=$key\">$key</a>";
+	    $result .= " (". count_num($hash{$key}) .")\n";
+	}
     } else {
 	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
 	    die "tie fail: $scan.db: $!";

@@ -1,13 +1,7 @@
 <!-- -*- html-helper -*- -->
 <TMPL_INCLUDE NAME=header.tmpl>
 <h2>登録グループ一覧</h2>
-<div class="addgroup-form">
-新規グループの登録： <form method="POST" action="./addgroup.cgi">
-<input type="hidden" name="cmd" value="newgroup">
-<input type="text"   name="name" value="" size="30">
-<input type="submit" name="submit" value=" 登 録 ">
-</form>
-</div>
+<TMPL_VAR NAME=ADDGROUP_FORM>
 <TMPL_VAR NAME=MYGROUP>
 <h2>登録データベース一覧</h2>
 <TMPL_VAR NAME=MYDB>
