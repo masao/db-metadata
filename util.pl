@@ -55,6 +55,14 @@ sub html2txt {
     return $result;
 }
 
+# タグの内容を正規表現で強引に引っ張ってくる
+sub get_tagvalues($$) {
+    my ($cont, $tagname) = @_;
+    my @tmp = ();
+    $cont =~ s/<$tagname(?:\s+[^>]*)?>([^<]+)<\/$tagname>/push @tmp, $1/ges;
+    return @tmp;
+}
+
 # HTMLの実体参照を行なう。
 sub escape_html($) {
     my ($str) = @_;
@@ -64,6 +72,20 @@ sub escape_html($) {
     $str =~ s/>/&gt;/g;
     $str =~ s/"/&quot;/go;
     return $str;
+}
+
+# 汚染されている変数をキレイにする。（CGI::Untaint のローカル実装）
+sub untaint($$$) {
+    my ($tainted, $pattern, $default) = (@_);
+    # print "\$tainted: $tainted\t\$pattern: $pattern\t\$default:$default\n";
+    return $default if !defined $tainted;
+
+    if ($tainted =~ /^($pattern)$/) {
+        # print "matched.\n";
+        return $1;
+    } else {
+        return $default;
+    }
 }
 
 # 効率よくファイルの中身を読み込む。

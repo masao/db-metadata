@@ -27,8 +27,8 @@ sub mkhash($$) {
 
     foreach my $file (@files) {
 	my $content = util::readfile("$conf::DATADIR/$file");
-        my ($id) = get_tagvalues($content, "dbid");
-        my @values = get_tagvalues($content, $name);
+        my ($id) = util::get_tagvalues($content, "dbid");
+        my @values = util::get_tagvalues($content, $name);
 	# print "$id => @values\n";
 	foreach my $key (@values) {
 	    next unless defined $key;
@@ -42,11 +42,4 @@ sub mkhash($$) {
 #    foreach my $key (sort keys %hash) {
 #	print "$key => $hash{$key}\n";
 #    }
-}
-
-sub get_tagvalues($$) {
-    my ($cont, $tagname) = @_;
-    my @tmp = ();
-    $cont =~ s/<$tagname(?:\s+[^>]*)?>([^<]+)<\/$tagname>/push @tmp, $1/ges;
-    return @tmp;
 }

@@ -102,6 +102,8 @@ $ROOT_ELEMENT = 'データベース';
 	       interval
 	       interval_num
 	       region
+
+	       id
 	      );
 
 # フォーム部品のうち、必須入力項目のもの
@@ -116,6 +118,7 @@ $ROOT_ELEMENT = 'データベース';
 # 「external」は登録時に動的に情報を追加したい場合に用いる。
 #
 %PARAM_TYPES = (
+		'id' =>  "hidden:0",
 		'dbid' =>  "hidden",
 		'userid' =>  "hidden",
 		'system' =>  'textfield:60',
