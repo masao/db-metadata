@@ -25,7 +25,7 @@ $NOTE = <<EOF;
 EOF
 
 # 必須項目を示すマーク（HTML）
-$REQ_MARK = '<span class="req-mark">※</span>';
+$REQ_MARK = '<small><font color="red">※</font></small>';
 
 # 登録内容を記録するディレクトリ名: `chmod a+w $DATADIR`しておくこと。
 $DATADIR = 'data';
