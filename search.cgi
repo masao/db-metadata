@@ -56,12 +56,13 @@ EOF
 
     opendir(DIR, $conf::DATADIR) || die "opendir: $conf::DATADIR: $!";
     @files = grep { /^\d+\.xml$/o } readdir(DIR);
+    @files = sort { $a <=> $b } @files;
     closedir(DIR) || die "closedir: $!";
 
     if (length($search)) {	# ¸¡º÷
 	my @result = ();
 	for my $file (@files) {
-	    my $cont = util::readfile($file);
+	    my $cont = util::readfile("$conf::DATADIR/$file");
 	    push @result, $file if $cont =~ /$search/oi;
 	}
 	@files = @result;
@@ -72,6 +73,7 @@ EOF
     print <<EOF;
 <table width="100%" border="1" bgcolor="$BGCOLOR">
 <tr bgcolor="$BGCOLOR_HEAD">
+<th> - </th>
 EOF
     for (my $i = 0; $i < @DISPLAY_ELEMENTS; $i++) {
 	print <<EOF;
@@ -85,7 +87,7 @@ EOF
 
     for (my $i = $page * $MAX; $i < @files && $i < ($page+1) * $MAX; $i++) {
 	print "<tr valign=\"top\">\n";
-	# print "<td><a href=\"$script_name/$i\">". $i+1 ."</a></td>\n";
+	print "<td><a href=\"$files[$i]\">", $i + 1, "</a></td>\n";
 	my $cont = util::readfile("$conf::DATADIR/$files[$i]");
 	for my $elem (@DISPLAY_ELEMENTS) {
 	    my @tmp = ();
