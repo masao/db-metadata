@@ -50,7 +50,7 @@ sub main {
 	}
 
 	# lockdir();
-	my $id = $Q::id || get_id();
+	my $id = util::untaint($q->param('id'), '\d+', undef) || get_id();
 	my $fh = util::fopen(">$conf::DATADIR/$id.xml");
 	print $fh param2xml($id);
 	$fh->close;
@@ -70,7 +70,25 @@ sub main {
 	# unlockdir();
 	
     } elsif (defined($q->param('id'))) {	# 更新用フォーム生成
-	
+	my $id = $q->param('id');
+	my $cont = util::readfile("$conf::DATADIR/$id.xml");
+	if ($q->remote_user() ne (util::get_tagvalues($cont, "userid"))[0]) {
+	    print $q->redirect("./browse.cgi?id=$id");
+	    exit;
+	}
+
+	print header("text/html; charset=utf-8");
+	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
+	$tmpl->param('TITLE' => $conf::TITLE,
+		     'HOME_TITLE' => $conf::HOME_TITLE,
+		     'HOME_URL' => $conf::HOME_URL,
+		     'FROM' => $conf::FROM,
+		     'SCRIPT_NAME' => script_name(),
+		     'USER' => remote_user(),
+		     'FORM_CONTROL' => param2form_update($cont, @conf::PARAMETERS),
+		     'REQ_MARK' => $conf::REQ_MARK,
+		    );
+	print $tmpl->output;
     } else {				# 新規登録フォーム生成
 	print header("text/html; charset=utf-8");
 	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
@@ -139,6 +157,48 @@ sub param2form(@) {
            $retstr .= "</table>";
        }
        $retstr .= "</td></tr>\n";
+    }
+    return $retstr;
+}
+
+# 更新用のフォーム部品を既存の内容に従って配置する
+sub param2form_update($@) {
+    my ($cont, @parameter) = (@_);
+    my $retstr = '';
+    for my $entry (@parameter) {
+	my @values = util::get_tagvalues($cont, $entry);
+	my @type = split(/:/, $conf::PARAM_TYPES{$entry});
+	if ($type[0] eq "external") {
+	    next;
+	} elsif ($type[0] eq 'hidden') {
+	    $retstr .= "<input type=\"hidden\" name=\"$entry\" value=\"";
+	    $retstr .= CGI::escapeHTML(join(',', @values)) if @values;
+	    $retstr .= "\">\n";
+	    next;
+	}
+
+	$retstr .= "<tr><th>$conf::PARAM_LABELS{$entry}";
+	$retstr .= " $conf::REQ_MARK" if defined $conf::REQ_PARAMETERS{$entry};
+	$retstr .= "</th><td>";
+
+	if ($type[0] eq 'textfield') {
+	    my $size = $type[1];
+	    $retstr .= "<input type=\"text\" name=\"$entry\" value=\"";
+	    $retstr .= CGI::escapeHTML(join(',', @values)) if @values;
+	    $retstr .= "\"";
+	    $retstr .= " size=\"$size\"" if defined $size;
+	    $retstr .= ">";
+	    if (defined $conf::PARAM_REPEATABLES{$entry}) {
+		$retstr .= "<br><small>複数の項目を登録する場合は、コンマで区切って入れてください。<br>例: $conf::PARAM_LABELS{$entry}1,$conf::PARAM_LABELS{$entry}2,$conf::PARAM_LABELS{$entry}3</small>";
+	    }
+	} elsif ($type[0] eq 'textarea') {
+	    my $rows = $type[1];
+	    my $cols = $type[2];
+	    $retstr .= "<textarea name=\"$entry\" rows=\"$rows\" cols=\"$cols\">";
+	    $retstr .= CGI::escapeHTML($values[0]) if @values;
+	    $retstr .= "</textarea>";
+	}
+	$retstr .= "</td></tr>\n";
     }
     return $retstr;
 }

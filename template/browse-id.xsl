@@ -97,6 +97,7 @@
           </xsl:if>
         </td>
       </tr>
+      <!--
       <tr>
         <td bgcolor="#aaddaa">登録者</td>
         <td>
@@ -106,6 +107,7 @@
           </xsl:if>
         </td>
       </tr>
+      -->
     </table>
   </xsl:template>
 
