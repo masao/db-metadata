@@ -10,23 +10,23 @@ use DB_File;
 
 use lib ".";
 require 'util.pl';
-require 'conf.pl';	# ÀßÄêÆâÍÆ¤òÆÉ¤ß¹ş¤à
+require 'conf.pl';	# è¨­å®šå†…å®¹ã‚’èª­ã¿è¾¼ã‚€
 
 $| = 1;
 
-# 1¥Ú¡¼¥¸¤ËÉ½¼¨¤¹¤ë·ï¿ô
+# 1ãƒšãƒ¼ã‚¸ã«è¡¨ç¤ºã™ã‚‹ä»¶æ•°
 my $MAX = 10;
 
-# 1¥Ú¡¼¥¸¤ËÉ½¼¨¤¹¤ë·ï¿ô
+# 1ãƒšãƒ¼ã‚¸ã«è¡¨ç¤ºã™ã‚‹ä»¶æ•°
 my $MAX_PAGE = 20;
 
-# URI ¤é¤·¤­Ê¸»úÎó¤Ë¼«Æ°Åª¤Ë¥ê¥ó¥¯¤òÄ¥¤ë¡©
+# URI ã‚‰ã—ãæ–‡å­—åˆ—ã«è‡ªå‹•çš„ã«ãƒªãƒ³ã‚¯ã‚’å¼µã‚‹ï¼Ÿ
 my $USE_AUTOLINK = 1;
 
-# °ìÍ÷É½¼¨¤Îºİ¤ËÉ½¼¨¤¹¤Ù¤­¹àÌÜ:  @conf::PARAMETERS ¤ÇÄêµÁºÑ¤ÎÃÍ¤òÆş¤ì¤ë
+# ä¸€è¦§è¡¨ç¤ºã®éš›ã«è¡¨ç¤ºã™ã¹ãé …ç›®:  @conf::PARAMETERS ã§å®šç¾©æ¸ˆã®å€¤ã‚’å…¥ã‚Œã‚‹
 my @DISPLAY_ELEMENTS = ('username', 'date');
 
-# CGI¥Ñ¥é¥á¡¼¥¿
+# CGIãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 my $q = new CGI;
 my $SCRIPT_NAME = $q->script_name();
 my $page = CGI::escapeHTML($q->param('page')) || 0;
@@ -35,17 +35,17 @@ my $sort = CGI::escapeHTML($q->param('sort')) || 0;
 my $id = CGI::escapeHTML($q->param('id'));
 my $scan = CGI::escapeHTML($q->param('scan'));
 
-# µ­Ï¿¤µ¤ì¤Æ¤¤¤ë¥Ç¡¼¥¿¤òÊİ»ı¤¹¤ëÇÛÎó
+# è¨˜éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’ä¿æŒã™ã‚‹é…åˆ—
 my @files = ();
 
 main();
 sub main {
-    print $q->header("text/html; charset=EUC-JP");
+    print $q->header("text/html; charset=UTF-8");
 
     if (defined $id) {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse-id.tmpl');
 	my $content = exec_xslt("$conf::DATADIR/$id.xml", "template/browse-id.xsl");
-	$tmpl->param('TITLE' => "¥Ç¡¼¥¿¥Ù¡¼¥¹¾ğÊó¤Î±ÜÍ÷",
+	$tmpl->param('TITLE' => "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹æƒ…å ±ã®é–²è¦§",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
@@ -56,7 +56,7 @@ sub main {
 	if (length($search)) {
 	    my $tmpl = HTML::Template->new('filename' => 'template/browse-scan-search.tmpl');
 	    my @files = get_scanned_files($scan, $search);
-	    $tmpl->param('TITLE' => "¥Ç¡¼¥¿¥Ù¡¼¥¹¾ğÊó¤Î±ÜÍ÷",
+	    $tmpl->param('TITLE' => "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹æƒ…å ±ã®é–²è¦§",
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
 			 'FROM' => $conf::FROM,
@@ -71,7 +71,7 @@ sub main {
 	    print $tmpl->output;
 	} else {
 	    my $tmpl = HTML::Template->new('filename' => 'template/browse-scan.tmpl');
-	    $tmpl->param('TITLE' => "$conf::PARAM_LABELS{$scan} °ìÍ÷",
+	    $tmpl->param('TITLE' => "$conf::PARAM_LABELS{$scan} ä¸€è¦§",
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
 			 'FROM' => $conf::FROM,
@@ -83,7 +83,7 @@ sub main {
 	my @files = reverse util::pickup_files();
 	@files = do_search(@files);
 
-	$tmpl->param('TITLE' => "¥Ç¡¼¥¿¥Ù¡¼¥¹¾ğÊó¤Î±ÜÍ÷",
+	$tmpl->param('TITLE' => "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹æƒ…å ±ã®é–²è¦§",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
@@ -100,7 +100,7 @@ sub main {
 sub do_search(@) {
     my (@files) = @_;
     my @result = ();
-    if (length($search)) {	# ¸¡º÷
+    if (length($search)) {	# æ¤œç´¢
 	foreach my $file (@files) {
 	    my $cont = util::readfile("$conf::DATADIR/$file");
 	    push @result, $file if $cont =~ /$search/oi;
@@ -125,7 +125,7 @@ sub scan_list($) {
     return $result;
 }
 
-# scan+search¾ò·ï¤Ë¹çÃ×¤¹¤ë¥Õ¥¡¥¤¥ëÌ¾¤òÊÖ¤¹¡£
+# scan+searchæ¡ä»¶ã«åˆè‡´ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¿”ã™ã€‚
 sub get_scanned_files($$) {
     my ($dbname, $str) = @_;
     my %hash = ();
@@ -149,7 +149,7 @@ sub list_table(@) {
 sub list_pages(@) {
     my (@files) = @_;
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
-    my $retstr = "<p>¥Ú¡¼¥¸:\n";
+    my $retstr = "<p>ãƒšãƒ¼ã‚¸:\n";
 
     my $start = $page - $MAX_PAGE/2;
     $start = 0 if $start < 0;
@@ -172,7 +172,7 @@ sub exec_xslt($$%) {
     require XML::LibXML;
     require XML::LibXSLT;
 
-    return "<p class=\"error\">¥Ç¡¼¥¿¥Õ¥¡¥¤¥ë¤¬ÆÉ¤ß¹ş¤á¤Ş¤»¤ó¡£</p>"
+    return "<p class=\"error\">ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ãŒèª­ã¿è¾¼ã‚ã¾ã›ã‚“ã€‚</p>"
 	unless -r $xmlsrc;
 
     my $parser = new XML::LibXML;
@@ -185,7 +185,7 @@ sub exec_xslt($$%) {
     return $stylesheet->output_string($result);
 }
 
-# ¿ô»ú¤ò¹ÍÎ¸¤·¤¿¥½¡¼¥È
+# æ•°å­—ã‚’è€ƒæ…®ã—ãŸã‚½ãƒ¼ãƒˆ
 sub fncmp() {
     my ($x, $y) = @_;
     $x =~ s/(\d+)/sprintf("%05d", $1)/ge;

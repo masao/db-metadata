@@ -1,79 +1,79 @@
 # $Id$
 package conf;
 
-### ���̤�����
+### 全般の設定
 
-# ô���ԤΥ᡼�륢�ɥ쥹
+# 担当者のメールアドレス
 $FROM = 'yuka@ulis.ac.jp';
 
-# �ڡ����Υ����ȥ�
-$TITLE = '�ǡ����١����������Ͽ/����';
+# ページのタイトル
+$TITLE = 'データベース情報の登録/更新';
 
-# �ۡ���ڡ����� URL
+# ホームページの URL
 $HOME_URL = 'http://nile.ulis.ac.jp/~yuka/db-template/top.html';
 
-# �ۡ���ڡ����Υ����ȥ�
-$HOME_TITLE = '�ǡ����١�������ͭ�ץ���������';
+# ホームページのタイトル
+$HOME_TITLE = 'データベース情報共有プロジェクト';
 
-# ɬ�ܹ��ܤ򼨤��ޡ�����HTML��
-$REQ_MARK = '<small><font color="red">��</font></small>';
+# 必須項目を示すマーク（HTML）
+$REQ_MARK = '<small><font color="red">※</font></small>';
 
-# ��Ͽ���Ƥ�Ͽ����ǥ��쥯�ȥ�̾: `chmod a+w $DATADIR`���Ƥ������ȡ�
+# 登録内容を記録するディレクトリ名: `chmod a+w $DATADIR`しておくこと。
 $DATADIR = 'data';
 
-# �᡼�����ε�ǽ��Ȥ���: �Ȥ����� 1 �ˤ��롣
+# メール通知機能を使う？: 使う場合は 1 にする。
 $USE_MAIL = 0;
 
-  # �᡼�����Τ������ Subject: ����ASCII�ϻȤ��ʤ���
+  # メール通知する場合の Subject: （非ASCIIは使えない）
   $SUBJECT = '[DB Metadata]';
 
-# �ǡ�������Ͽ���� XML �Υ롼������̾
-$ROOT_ELEMENT = '�ǡ����١���';
+# データを登録する XML のルート要素名
+$ROOT_ELEMENT = 'データベース';
 
-### HTML �� <form> ���ʤ����
+### HTML の <form> 部品の定義
 
-# �ե��������ʤΥ�٥��̾����
-%PARAM_LABELS = ('user' => '��Ͽ��',
-		 'username' => '̾��',
-		 'e-mail' => 'E-mail',# �᡼�����Τ������ɬ�סʰ����
+# フォーム部品のラベル（名前）
+%PARAM_LABELS = ('user' => '登録者',
+		 'username' => '名前',
+		 'e-mail' => 'E-mail',# メール通知する場合は必要（宛先）
 		 'url' => 'URL',
 
-		 'dbid' => '�ǡ����١���ID',
-		 'dbname' => '�ǡ����١���̾',
-		 'dbname_yomi' => '�ǡ����١���̾�����',
-		 'system' => '�����ƥ�̾',
-		 'system_yomi' => '�����ƥ�̾�����',
-		 'producer' => '�ץ��ǥ塼��̾',
-		 'producer_yomi' => '�ץ��ǥ塼��̾�����',
-		 'producer_country' => '�ץ��ǥ塼����̾',
-		 'distributor' => '�ǥ����ȥ�ӥ塼��̾',
-		 'distributor_yomi' => '�ǥ����ȥ�ӥ塼��̾�����',
-		 'distributor_country' => '�ǥ����ȥ�ӥ塼����̾',
+		 'dbid' => 'データベースID',
+		 'dbname' => 'データベース名',
+		 'dbname_yomi' => 'データベース名・ヨミ',
+		 'system' => 'システム名',
+		 'system_yomi' => 'システム名・ヨミ',
+		 'producer' => 'プロデューサ名',
+		 'producer_yomi' => 'プロデューサ名・ヨミ',
+		 'producer_country' => 'プロデューサ国名',
+		 'distributor' => 'ディストリビュータ名',
+		 'distributor_yomi' => 'ディストリビュータ名・ヨミ',
+		 'distributor_country' => 'ディストリビュータ国名',
 
-		 'description' => '�ǡ����١�������ħ',
-		 'field' => 'ʬ��',
-		 'keyword' => '�������',
-		 'type' => '�ǡ����Υ�����',
-		 'publication' => '������̾',
-		 'survey' => 'Ĵ��̾',
-		 'lang' => '�ǡ����ε��Ҹ���',
-		 'period' => '��Ͽ����',
-		 'total' => '��Ͽ���',
-		 'interval' => '��������',
-		 'interval_num' => '�������',
-		 'region' => '��Ͽ������ϰ�',
+		 'description' => 'データベースの特徴',
+		 'field' => '分野',
+		 'keyword' => 'キーワード',
+		 'type' => 'データのタイプ',
+		 'publication' => '冊子体名',
+		 'survey' => '調査名',
+		 'lang' => 'データの記述言語',
+		 'period' => '収録期間',
+		 'total' => '収録件数',
+		 'interval' => '更新周期',
+		 'interval_num' => '更新件数',
+		 'region' => '収録情報の地域',
 
-		 'service_type' => '�����ӥ�����',
-		 'distribute_type' => '�ǡ����󶡷���',
-		 'terminal_type' => 'ü������',
-		 'fee' => '�����ӥ�����',
-		 'time' => '�����ӥ�������',
-		 'condition' => '���Ѿ��',
-		 'comment' => '������',
-		 'date' => '��Ͽ��'
+		 'service_type' => 'サービス種別',
+		 'distribute_type' => 'データ提供形態',
+		 'terminal_type' => '端末種別',
+		 'fee' => 'サービス料金',
+		 'time' => 'サービス時間帯',
+		 'condition' => '使用条件',
+		 'comment' => 'コメント',
+		 'date' => '登録日'
 		);
 
-# �ե��������ʤ�ɽ�������CVS�ե�����ؤ���Ͽ����ͤ�
+# フォーム部品の表示順序、CVSファイルへの登録順も兼ねる
 @PARAMETERS = ('user',
 
 	       'dbname',
@@ -110,20 +110,20 @@ $ROOT_ELEMENT = '�ǡ����١���';
 	       'date'
 	      );
 
-# �ե��������ʤΤ�����ɬ�����Ϲ��ܤΤ��
-# �ʡ�e-mail�פξ��ϥ᡼�륢�ɥ쥹�δʰץ����å���Ԥ���
+# フォーム部品のうち、必須入力項目のもの
+# （「e-mail」の場合はメールアドレスの簡易チェックも行う）
 %REQ_PARAMETERS = ('username' => 1,
 		   'dbname' => 1,
 #		   'description' => 1,
 		  );
 
-# �ե��������ʤμ���: textfield, textarea, radio, etc.
+# フォーム部品の種類: textfield, textarea, radio, etc.
 #
-# ��external�פ���Ͽ����ưŪ�˾�����ɲä����������Ѥ��롣
+# 「external」は登録時に動的に情報を追加したい場合に用いる。
 #
 %PARAM_TYPES = ('user' => 'nest:username:e-mail:url',
 		'username' => 'textfield:40',
-		'e-mail' => 'textfield:40',# �᡼�����Τ������ɬ�סʰ����
+		'e-mail' => 'textfield:40',# メール通知する場合は必要（宛先）
 		'url' => 'textfield:40',
 
 		'dbname'=> 'textfield:40',
@@ -160,7 +160,7 @@ $ROOT_ELEMENT = '�ǡ����١���';
 		'date' => 'external:sprintf("%d-%02d-%02d",(localtime)[5]+1900,(localtime)[4]+1,(localtime)[3])',
 	       );
 
-# repeatable �����Ϲ���
+# repeatable な入力項目
 %PARAM_REPEATABLES = ('keyword' => 1,
 		      'type' => 1,
 		      'lang' => 1,
@@ -169,5 +169,5 @@ $ROOT_ELEMENT = '�ǡ����١���';
 		      'distribute_type' => 1,
 		     );
 
-### ���ꤪ���
+### 設定おわり
 1;

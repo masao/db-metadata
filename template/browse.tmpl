@@ -4,30 +4,30 @@
 <tr valign="top">
 <td nowrap>
   <ul>
-    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=dbname">¥Ç¡¼¥¿¥Ù¡¼¥¹Ì¾°ìÍ÷</a>
-    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=system">¥·¥¹¥Æ¥àÌ¾°ìÍ÷</a>
-    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=keyword">¥­¡¼¥ï¡¼¥É°ìÍ÷</a>
-    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=field">Ê¬Ìî°ìÍ÷</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=dbname">ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åä¸€è¦§</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=system">ã‚·ã‚¹ãƒ†ãƒ åä¸€è¦§</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=keyword">ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ä¸€è¦§</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=field">åˆ†é‡Žä¸€è¦§</a>
 </td>
 <td align="right">
 <form method="GET" action="<TMPL_VAR NAME="SCRIPT_NAME">">
 <input type="text" name="search" value="<TMPL_VAR NAME="search">" size="30">
 <input type="hidden" name="sort" value="<TMPL_VAR NAME="sort">">
-<input type="submit" value=" ¸¡º÷ ">
+<input type="submit" value=" æ¤œç´¢ ">
 </form>
 </td>
 </table>
 <hr>
 <TMPL_IF NAME=SEARCH>
-<!-- p>Perl ¤Ç /<TMPL_VAR NAME=search>/oi ¤·¤Æ¤¤¤Þ¤¹¡£grep -i ¤È¤Û¤ÜÆ±¤¸¤Ç¤¹¡£</p -->
-<p><font color="red">¸¡º÷·ë²Ì: <TMPL_VAR NAME=search_result> ·ï</font></p>
+<!-- p>Perl ã§ /<TMPL_VAR NAME=search>/oi ã—ã¦ã„ã¾ã™ã€‚grep -i ã¨ã»ã¼åŒã˜ã§ã™ã€‚</p -->
+<p><font color="red">æ¤œç´¢çµæžœ: <TMPL_VAR NAME=search_result> ä»¶</font></p>
 </TMPL_IF>
 <table width="100%" border="1" bgcolor="#ddddd0">
 <tr bgcolor="#aaddaa">
-<th>¥Ç¡¼¥¿¥Ù¡¼¥¹ID</th>
-<th>¥Ç¡¼¥¿¥Ù¡¼¥¹Ì¾</th>
-<th>ÆÃÄ§</th>
-<th>Ê¬Ìî</th>
+<th>ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ID</th>
+<th>ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹å</th>
+<th>ç‰¹å¾´</th>
+<th>åˆ†é‡Ž</th>
 </tr>
 <TMPL_VAR NAME="list_table">
 </table>
