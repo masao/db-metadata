@@ -70,7 +70,6 @@ sub main {
 		    );
 	print $tmpl->output;
 	# unlockdir();
-	
     } elsif (defined($q->param('id'))) {	# 更新用フォーム生成
 	my $id = $q->param('id');
 	my $cont = util::readfile("$conf::DATADIR/$id.xml");
@@ -96,13 +95,11 @@ sub main {
 	my $include = $q->param('include');
 	my $id = get_id();
 	my $cont = util::readfile("$conf::DATADIR/$include.xml");
-	$cont =~ s/<id>$include<\/id>/<id>$id<\/id>/g;
 	$cont =~ s/<source_id\/>/<source_id>$include<\/source_id>/g;
 	$cont =~ s/<source_id>(.*)<\/source_id>/<source_id>$include<\/source_id>/g;
-#	if ($q->remote_user() ne (util::get_tagvalues($cont, "userid"))[0]) {
-#	    print $q->redirect("./browse.cgi?id=$id");
-#	    exit;
-#	}
+	# 流用する必要のない項目は消しておく:
+	$cont =~ s/<id>$include<\/id>//g;
+	$cont =~ s/<created_date>(.*)<\/created_date>//g;
 
 	print header("text/html; charset=utf-8");
 	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
@@ -236,13 +233,15 @@ sub param2form_update($@) {
 sub param2xml($) {
     my ($id) = @_;
     my $date = POSIX::strftime("%Y-%m-%dT%H:%M:%S", localtime());
+    $Q::created_date = $date
+	if !defined($Q::created_date) || !length($Q::created_date);
     my $xml = <<EOF;
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE database_metadata SYSTEM "db.dtd">
 <database_metadata>
   <id>$id</id>
   <source_id>$Q::source_id</source_id>
-  <created_date>$date</created_date>
+  <created_date>$Q::created_date</created_date>
   <update_date>$date</update_date>
   <userid>$user</userid>
   <dbname>$Q::dbname</dbname>
