@@ -60,7 +60,7 @@ sub my_grouplist() {
 	$retstr .= "<div><span style=\"font-weight:bold;font-size:larger;\">";
 	$retstr .= "<a href=\"./browse.cgi?scan=group;search=$id\">". $info{$id}->{'name'} ."</a></span>\n";
 	if ($user eq $userid) {
-	    $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
+	    $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">$$MSG{$conf::LANG}{'personal_modify'}</a></span></div>";
 	}
 	if (length($info{$id}->{'description'})) {
 	    $retstr .= "<div style=\"font-size:smaller;margin-left:2em\">". $info{$id}->{'description'} ."</div>\n";
