@@ -54,6 +54,14 @@
         </td>
       </tr>
       <tr>
+        <td bgcolor="#aaddaa">アクセス先</td>
+        <td>
+          <xsl:if test="boolean(string-length(//access))">
+            <a href="{//access}"><xsl:value-of select="//access"/></a>
+          </xsl:if>
+        </td>
+      </tr>
+      <tr>
         <td bgcolor="#aaddaa">利用条件</td>
         <td><xsl:value-of select="//condition"/></td>
       </tr>
