@@ -6,6 +6,7 @@ use strict;
 use CGI qw/:standard/;
 use CGI::Carp 'fatalsToBrowser';
 use HTML::Template;
+use DB_File;
 
 use lib ".";
 require 'util.pl';
@@ -32,6 +33,7 @@ my $page = CGI::escapeHTML($q->param('page')) || 0;
 my $search = CGI::escapeHTML($q->param('search')) || "";
 my $sort = CGI::escapeHTML($q->param('sort')) || 0;
 my $id = CGI::escapeHTML($q->param('id'));
+my $scan = CGI::escapeHTML($q->param('scan'));
 
 # 記録されているデータを保持する配列
 my @files = ();
@@ -49,6 +51,15 @@ sub main {
 		     'FROM' => $conf::FROM,
 		     'CONTENT' => $content,
 		     'ID' => $id);
+	print $tmpl->output;
+    } elsif (defined $scan) {
+	my $tmpl = HTML::Template->new('filename' => 'template/browse-scan.tmpl');
+	
+	$tmpl->param('TITLE' => "データベース情報の閲覧",
+		     'HOME_TITLE' => $conf::HOME_TITLE,
+		     'HOME_URL' => $conf::HOME_URL,
+		     'FROM' => $conf::FROM,
+		     'scan_list' => scan_list($scan));
 	print $tmpl->output;
     } else {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse.tmpl');
@@ -81,6 +92,20 @@ sub do_search(@) {
 	@result = @files;
     }
     return @result;
+}
+
+sub scan_list($) {
+    my ($dbname) = @_;
+    my $result = "";
+    my %hash = ();
+    tie(%hash, 'DB_File', "$dbname.db", O_RDONLY) ||
+	die "tie fail: $dbname.db: $!";
+    foreach my $key (sort keys %hash) {
+	my @id = split(/,/, $hash{$key});
+	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;searchfield=$dbname\">$key</a>";
+	$result .= "(". scalar(@id) .")\n";
+    }
+    return $result;
 }
 
 sub list_table(@) {
