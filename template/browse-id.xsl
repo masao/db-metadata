@@ -60,17 +60,12 @@
         <td><xsl:value-of select="//condition"/></td>
       </tr>
       <xsl:apply-templates select="//contributor" />
-      <!--
       <tr>
         <td bgcolor="#aaddaa">登録者</td>
         <td>
-          <a href="browse.cgi?scan=username;search={//username}"><xsl:value-of select="//username"/></a>
-          <xsl:if test="//user_url">
-            (<a><xsl:attribute name="href"><xsl:value-of select="//user_url"/></xsl:attribute><xsl:value-of select="//user_url"/></a>)
-          </xsl:if>
+          <a href="personal.cgi?userid={//userid}"><xsl:value-of select="//userid"/></a>
         </td>
       </tr>
-      -->
     </table>
   </xsl:template>
   <xsl:template match="//contributor">
