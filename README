@@ -1,48 +1,12 @@
-1. 作成されるcsvファイルの文字コードと改行コード
+[簡単な設置手順]
 
-なんの加工（変換）もせずに、書き出しています。
-
-基本的にはUNIX向きの
-・文字コード：EUC-JP
-・改行コード：<LF>
-になっているはずです。
-
-2. テスト方法 「make」するとgenform.cgiのテストができます。
-
-テスト成功例）
-
+% cvs -d ~masao/.cvsroot co db-metadata
+% cd db-metadata
 % make
-perl -e 'use Test::Harness qw(&runtests $verbose); $verbose=0; runtests @ARGV;' t
-ests/*.t
-tests/common....ok
-All tests successful.
-Files=1, Tests=6,  3 wallclock secs ( 2.73 cusr +  0.58 csys =  3.31 CPU)
-%
 
-テスト失敗例）
+% ln -s ~yuka/public_html/db-template/db-metadata/data .
 
-% make
-perl -e 'use Test::Harness qw(&runtests $verbose); $verbose=0; runtests @ARGV;' t
-ests/*.t
-tests/common....FAILED tests 2-6
-        Failed 5/6 tests, 16.67% okay
-Failed Test    Stat Wstat Total Fail  Failed  List of Failed
--------------------------------------------------------------------------------
-tests/common.t                6    5  83.33%  2-6
-Failed 1/1 test scripts, 0.00% okay. 5/6 subtests failed, 16.67% okay.
-make: *** [test] Error 11
-%
-
-3. テストに失敗した場合 「perl -c ./conf.pl」 を実行してみて下さい。
-
-例）40行目に「,」を忘れていた場合
-
-% perl -c ./conf.pl
-String found where operator expected at ./conf.pl line 41, near "'post'"
-        (Missing semicolon on previous line?)
-syntax error at ./conf.pl line 41, near "'post'"
-./conf.pl had compilation errors.
-
-% cat -n conf.pl | head -41 | tail -2
-    40  %PARAM_LABELS = ('name' => '名前'
-    41                   'post' => '所属',
+% cd member
+% ln -s ../data .
+% ln -s ../browse.cgi .
+% ln -s ../index.cgi .
