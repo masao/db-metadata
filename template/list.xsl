@@ -7,13 +7,13 @@
 
   <xsl:template match="/">
     <tr valign="top">
-      <td><xsl:value-of select="//dbid"/></td>
+      <td><xsl:value-of select="//id"/></td>
       <td><a href="browse.cgi?id={$id}"><xsl:value-of select="//dbname"/></a></td>
       <td><xsl:value-of select="//description"/></td>
-      <td><xsl:apply-templates select="//field" /></td>
+      <td><xsl:apply-templates select="//subject" /></td>
     </tr>
   </xsl:template>
-  <xsl:template match="//field">
+  <xsl:template match="//subject">
     <xsl:value-of select="."/>;
   </xsl:template>
 </xsl:stylesheet>

@@ -12,12 +12,12 @@ my @test_args =
     ("id=0001",
      "id=unknown",
      "search=新聞",
-     "scan=keyword",
+     "scan=subject",
      "id=0356", # データ項目が少なめ
      "id=8139", # 一番データが多い
      "id=9354", # 最後のid
-     "scan=keyword search=PC",
-     "scan=keyword search=エネルギー page=1",
+     "scan=subject search=PC",
+     "scan=subject search=エネルギー page=1",
      "scan=system",
      );
 

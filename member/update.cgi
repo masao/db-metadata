@@ -215,31 +215,21 @@ sub param2xml($) {
   <source_id/>
   <created_date>$date</created_date>
   <update_date>$date</update_date>
-  <dbid>$id</dbid>
   <userid>$user</userid>
   <system>$Q::system</system>
   <system_yomi>$Q::system_yomi</system_yomi>
-  <distributor>$Q::distributor</distributor>
-  <distributor_yomi>$Q::distributor_yomi</distributor_yomi>
-  <distributor_country>$Q::distributor_country</distributor_country>
 EOF
+    $xml .= repeatable_tags("contributor");
     $xml .= repeatable_tags("service_type");
-    $xml .= repeatable_tags("distribute_type");
+    $xml .= repeatable_tags("format");
     $xml .= repeatable_tags("terminal_type");
     $xml .= <<EOF;
-  <fee>$Q::fee</fee>
-  <time>$Q::time</time>
   <condition>$Q::condition</condition>
-  <comment>$Q::comment</comment>
   <dbname>$Q::dbname</dbname>
   <dbname_yomi>$Q::dbname_yomi</dbname_yomi>
-  <producer>$Q::producer</producer>
-  <producer_yomi>$Q::producer_yomi</producer_yomi>
-  <producer_country>$Q::producer_country</producer_country>
   <description>$Q::description</description>
 EOF
-    $xml .= repeatable_tags("field");
-    $xml .= repeatable_tags("keyword");
+    $xml .= repeatable_tags("subject");
     $xml .= repeatable_tags("type");
     $xml .= <<EOF;
   <publication>$Q::publication</publication>

@@ -20,19 +20,19 @@ require 'conf.pl';	# 設定内容を読み込む
 
 my $comment = CGI::escapeHTML($q->param('comment')) || "";
 $comment = nl2br(strip($comment));
-my $dbid = $q->param('dbid');
-$dbid = util::untaint($dbid, '\d+', undef);
+my $id = $q->param('id');
+$id = util::untaint($id, '\d+', undef);
 
 main();
 sub main {
-    if (defined $dbid) {
+    if (defined $id) {
 	if (length($comment)) {
 	    my $date = POSIX::strftime "%Y-%m-%d %H:%M", localtime();
-	    # lock("bbs/$dbid");
-	    my $fh = util::fopen(">> $BASEDIR/bbs/$dbid");
+	    # lock("bbs/$id");
+	    my $fh = util::fopen(">> $BASEDIR/bbs/$id");
 	    print $fh "$user\t$date\t$comment\n";
 	    $fh->close;
-	    # unlock("bbs/$dbid");
+	    # unlock("bbs/$id");
 	}
 #  	my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/bbs.tmpl");
 #  	$tmpl->param('TITLE' => "データベースに関するコメント",
@@ -40,13 +40,13 @@ sub main {
 #  		     'HOME_URL' => $conf::HOME_URL,
 #  		     'FROM' => $conf::FROM,
 #  		     'BASEDIR' => $BASEDIR,
-#  		     'BBS-LIST' => util::bbs_list($dbid, $BASEDIR),
+#  		     'BBS-LIST' => util::bbs_list($id, $BASEDIR),
 #  		     'USER' => $user,
-#  		     'ID' => $dbid,
+#  		     'ID' => $id,
 #  		     );
 #  	print $q->header("text/html; charset=utf-8");
 #  	print $tmpl->output;
-	print $q->redirect("./browse.cgi?id=$dbid");
+	print $q->redirect("./browse.cgi?id=$id");
     }
 }
 

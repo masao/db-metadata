@@ -1,4 +1,4 @@
-INDEX = keyword.db dbname.db system.db username.db producer.db distributor.db field.db
+INDEX = subject.db dbname.db system.db userid.db contributor.db
 
 all: $(INDEX) test
 

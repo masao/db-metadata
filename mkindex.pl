@@ -27,7 +27,7 @@ sub mkhash($$) {
 
     foreach my $file (@files) {
 	my $content = util::readfile("$conf::DATADIR/$file");
-        my ($id) = util::get_tagvalues($content, "dbid");
+        my ($id) = util::get_tagvalues($content, "id");
         my @values = util::get_tagvalues($content, $name);
 	# print "$id => @values\n";
 	foreach my $key (@values) {
