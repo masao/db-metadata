@@ -1,5 +1,6 @@
 <!-- -*- html-helper -*- -->
 <TMPL_INCLUDE NAME=header.tmpl>
+<div><a href="<TMPL_VAR NAME=BASEDIR>/data/<TMPL_VAR NAME=ID>.xml"><TMPL_VAR NAME=ID>.xml</a></div>
 <TMPL_VAR NAME=CONTENT>
 <TMPL_IF NAME=UPDATABLE>
 <div align="right"><a href="update.cgi?id=<TMPL_VAR NAME=ID>">[更新]</a></div>

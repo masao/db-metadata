@@ -5,8 +5,6 @@
   <xsl:output method="html" encoding="UTF-8"/>
 
   <xsl:template match="/">
-    <a><xsl:attribute name="href">../data/<xsl:value-of select="//id"/>.xml</xsl:attribute><xsl:value-of select="//id"/>.xml</a>
-
     <table bgcolor="#ddddd0" border="2" cellpadding="2">
       <tr>
         <td bgcolor="#aaddaa">データベースID</td>
