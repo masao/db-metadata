@@ -42,7 +42,7 @@ sub main {
 
     if (defined $id) {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse-id.tmpl');
-	my $content = exec_xslt("data/$id.xml", "template/browse-id.xsl");
+	my $content = exec_xslt("$conf::DATADIR/$id.xml", "template/browse-id.xsl");
 	$tmpl->param('TITLE' => "データベース情報の閲覧",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
