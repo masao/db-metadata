@@ -267,6 +267,7 @@ sub list_table(@) {
 sub list_pages(@) {
     my (@files) = @_;
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
+    $base_url .= ";field=$field" if defined $field;
     $base_url .= ";scan=$scan" if defined $scan;
     my $retstr = "";
 
