@@ -3,6 +3,7 @@
 # $Id$
 
 use strict;
+use vars qw($MSG);
 use CGI qw/:standard/;
 use CGI::Carp 'fatalsToBrowser';
 use HTML::Template;
@@ -28,6 +29,7 @@ $BASEDIR = ".." if defined $user;
 unshift @INC, $BASEDIR;
 require 'util.pl';
 require 'conf.pl';	# 設定内容を読み込む
+require 'message.pl';
 
 # 1ページに表示する件数
 my $MAX = 20;
@@ -337,14 +339,14 @@ sub addgroup_form() {
 <input type="hidden" name="cmd" value="addgroup">
 <input type="hidden" name="dbid" value="$id">
 <select name="groupid">
-  <option value=""> -- グループ選択 -- </option>
+  <option value="">$$MSG{$conf::LANG}{'addgroup_select'}</option>
 EOF
 	foreach my $id (keys %info) {
 	    $retstr .= "  <option value=\"$id\">". $info{$id}->{'name'} ."</option>\n";
 	}
 	$retstr .= <<EOF;
 </select>
-<input type="submit" value=" グループに追加する ">
+<input type="submit" value="$$MSG{$conf::LANG}{'addgroup_submit'}">
 </form>
 EOF
     }
