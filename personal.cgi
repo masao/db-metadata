@@ -50,9 +50,10 @@ sub addgroup_form () {
     if ($user eq $userid) {
 	$retstr = <<EOF;
 <div class="addgroup-form">
-新規グループの登録： <form method="POST" action="./addgroup.cgi">
+<form method="POST" action="./addgroup.cgi">
 <input type="hidden" name="cmd" value="newgroup">
-<input type="text"   name="name" value="" size="30">
+新規グループ名: <input type="text"   name="name" value="" size="30"><br>
+説明: <input type="text" name="description" value="" size="60">
 <input type="submit" name="submit" value=" 登 録 ">
 </form>
 </div>
@@ -60,6 +61,7 @@ EOF
     }
     return $retstr;
 }
+
 sub my_grouplist() {
     my $retstr = '';
     my %info = util::get_groupinfo("$BASEDIR/group.txt");
@@ -73,6 +75,9 @@ sub my_grouplist() {
 	$retstr .= "<div><span style=\"font-weight:bold;font-size:larger;\">". $info{$id}->{'name'} ."</span>\n";
 	if ($user eq $userid) {
 	    $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
+	}
+	if (length($info{$id}->{'description'})) {
+	    $retstr .= "<div style=\"font-size:smaller;margin-left:2em\">". $info{$id}->{'description'} ."</div>\n";
 	}
 	$retstr .= "<ul>\n";
 	foreach my $subid (@{$info{$id}->{'list'}}) {

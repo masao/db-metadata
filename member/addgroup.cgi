@@ -20,9 +20,11 @@ my $q = CGI->new();
 my $user = $q->remote_user();
 
 my $cmd = $q->param('cmd');
-my $name = $q->param('name');
 my $dbid = $q->param('dbid');
 my $groupid = $q->param('groupid');
+my $name = $q->param('name');
+my $description = $q->param('description');
+$description =~ s/\s+/ /g;
 
 main();
 sub main {
@@ -30,8 +32,9 @@ sub main {
 	if ($cmd eq "newgroup" && defined($name) && length($name)) {
 	    my %group = util::get_groupinfo("../group.txt");
 	    my $newid = (sort { $b <=> $a } keys %group)[0] + 1;
-	    $group{$newid} = {'name' => $q->param('name'),
+	    $group{$newid} = {'name' => $name,
 			      'user' => $user,
+			      'description' => $description,
 			      'list' => [] };
 	    util::write_groupinfo("../group.txt", %group);
 	    print $q->redirect("./personal.cgi");
@@ -61,6 +64,7 @@ sub main {
 		my %group = util::get_groupinfo("../group.txt");
 		my %info = %{$group{$groupid}};
 		$info{'name'} = $name;
+		$info{'description'} = $description;
 		$group{$groupid} = \%info;
 		util::write_groupinfo("../group.txt", %group);
 		print $q->redirect("./addgroup.cgi?cmd=editgroup;groupid=$groupid");
@@ -99,8 +103,10 @@ sub editgroup_form() {
     my $retstr = "<form action=\"./addgroup.cgi\" method=\"GET\">\n";
     my %group = util::get_groupinfo("../group.txt");
     my $name = $group{$groupid}->{'name'};
+    my $description = $group{$groupid}->{'description'};
     $retstr .= <<EOF;
-グループ名：<input type="text" name="name" value="$name" size="30">
+グループ名：<input type="text" name="name" value="$name" size="30"><br>
+説明：<input type="text" name="description" value="$description" size="60">
 <input type="hidden" name="cmd" value="editgroup">
 <input type="hidden" name="groupid" value="$groupid">
 <input type="submit" name="submit" value="変更">

@@ -55,11 +55,12 @@ sub get_groupinfo($$) {
     my %info = ();
     my $fh = fopen($fname);
     while (defined(my $line = <$fh>)) {
-	if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
+	if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t([^\t]*)\t(.*)$/){
 	    next if (defined($user) && $user ne $2);
 	    $info{$1} = {'user' => $2,
 			 'name' => $3,
-			 'list' => [ split(',', $4) ]
+			 'description' => $4,
+			 'list' => [ split(',', $5) ]
 			};
 	    # print $line;
 	}
@@ -74,6 +75,7 @@ sub write_groupinfo($%) {
     foreach my $id (keys %info) {
 	print $fh "$id\t";
 	print $fh $info{$id}->{"user"} .":". $info{$id}->{"name"} ."\t";
+	print $fh $info{$id}->{"description"} ."\t";
 	print $fh join(",", @{$info{$id}->{'list'}});
 	print $fh "\n";
     }
