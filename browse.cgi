@@ -16,6 +16,9 @@ $| = 1;
 # 1ページに表示する件数
 my $MAX = 10;
 
+# 1ページに表示する件数
+my $MAX_PAGE = 20;
+
 # URI らしき文字列に自動的にリンクを張る？
 my $USE_AUTOLINK = 1;
 
@@ -39,7 +42,7 @@ sub main {
 
     if (defined $id) {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse-id.tmpl');
-	my $content = exec_xslt("data/$id.xml", "template/html.xsl");
+	my $content = exec_xslt("data/$id.xml", "template/browse-id.xsl");
 	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
@@ -51,7 +54,7 @@ sub main {
 	my @files = pickup_files();
 	@files = do_search(@files);
 
-	$tmpl->param('TITLE' => $conf::TITLE,
+	$tmpl->param('TITLE' => "データベース情報の閲覧",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
@@ -68,7 +71,7 @@ sub main {
 sub pickup_files() {
     my @files = ();
     opendir(DIR, $conf::DATADIR) || die "opendir: $conf::DATADIR: $!";
-    @files = sort fncmp grep { /^\d+\.xml$/ } readdir(DIR);
+    @files = sort grep(/^\d+\.xml$/, readdir(DIR));
     closedir(DIR) || die "closedir: $!";
     return @files;
 }
@@ -103,7 +106,11 @@ sub list_pages(@) {
     my (@files) = @_;
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
     my $retstr = "<p>ページ:\n";
-    for (my $i = 0; $i*$MAX < @files; $i++) {
+
+    my $start = $page - $MAX_PAGE/2;
+    $start = 0 if $start < 0;
+
+    for (my $i = $start; $i < $page+$MAX_PAGE/2 && $i*$MAX < @files; $i++) {
 	if ($i == $page) {
 	    $retstr .= "[". ( $i+1 ) ."]\n";
 	} else {
