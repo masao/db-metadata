@@ -239,7 +239,7 @@ EOF
   <interval_num>$Q::interval_num</interval_num>
   <region>$Q::region</region>
   <category/>
-  <access/>
+  <access>$Q::access</access>
 </database_metadata>
 EOF
     return $xml;

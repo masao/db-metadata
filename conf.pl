@@ -54,7 +54,7 @@ $ROOT_ELEMENT = 'データベース';
 		 'interval_num' =>  "更新件数",
 		 'region' =>  "対象地域",
 		 'category' =>  "カテゴリ",
-		 'access' =>  "アクセス先",
+		 'access' =>  "アクセス先（URLなど）",
 		 'group', =>  "グループ名",
 		);
 
@@ -67,6 +67,7 @@ $ROOT_ELEMENT = 'データベース';
 
 	       id
 	       userid
+               access
 	       system
 	       contributor
 	       format
@@ -116,6 +117,7 @@ $ROOT_ELEMENT = 'データベース';
 		'interval' =>  'textfield:60',
 		'interval_num' =>  'textfield:60',
 		'region' =>  'textfield:60',
+		'access' =>  'textfield:60',
 	       );
 
 # repeatable な入力項目
