@@ -44,23 +44,75 @@ sub main {
 		$group{$groupid}->{'list'} = [ @list ];
 		util::write_groupinfo("../group.txt", %group);
 	    }
-	    print STDERR "DBID: $dbid";
 	    print $q->redirect("./browse.cgi?id=$dbid");
+	} elsif ($cmd eq "delgroup") {
+	    die("グループIDが指定されていません。")
+		unless defined($groupid) && length($groupid);
+	    my %group = util::get_groupinfo("../group.txt");
+	    die("別のユーザが登録したグループです。")
+		unless $group{$groupid}->{'user'} eq $user;
+	    die("まだデータベースが登録されています。")
+		if scalar @{$group{$groupid}->{'list'}};
+	    delete $group{$groupid};
+	    util::write_groupinfo("../group.txt", %group);
+	    print $q->redirect("./personal.cgi");
+	} elsif ($cmd eq "editgroup") {
+	    if ($q->param('submit')) {
+		my %group = util::get_groupinfo("../group.txt");
+		my %info = %{$group{$groupid}};
+		$info{'name'} = $name;
+		$group{$groupid} = \%info;
+		util::write_groupinfo("../group.txt", %group);
+		print $q->redirect("./addgroup.cgi?cmd=editgroup;groupid=$groupid");
+	    } else {
+		print $q->header("text/html; charset=utf-8");
+		my $tmpl = HTML::Template->new('filename' => '../template/editgroup.tmpl');
+		$tmpl->param('TITLE' => "グループの編集",
+			     'HOME_TITLE' => $conf::HOME_TITLE,
+			     'HOME_URL' => $conf::HOME_URL,
+			     'FROM' => $conf::FROM,
+			     'SCRIPT_NAME' => script_name(),
+			     'USER' => remote_user(),
+			     'BASEDIR' => '..',
+			     'GROUPID' => $groupid,
+			     'EDITGROUP_FORM' => editgroup_form(),
+			    );
+		print $tmpl->output;
+	    }
+	} elsif ($cmd eq "deldb") {
+	    my %group = util::get_groupinfo("../group.txt");
+	    my %info = %{$group{$groupid}};
+	    my @list = grep { $dbid ne $_ } @{$info{'list'}};
+	    $info{'list'} = \@list;
+	    $group{$groupid} = \%info;
+	    util::write_groupinfo("../group.txt", %group);
+	    print $q->redirect("./addgroup.cgi?cmd=editgroup;groupid=$groupid");
 	} else {
-	    print $q->header("text/html; charset=utf-8");
-	    my $tmpl = HTML::Template->new('filename' => '../template/addgroup.tmpl');
-	    $tmpl->param('TITLE' => "新規グループの追加",
-			 'HOME_TITLE' => $conf::HOME_TITLE,
-			 'HOME_URL' => $conf::HOME_URL,
-			 'FROM' => $conf::FROM,
-			 'SCRIPT_NAME' => script_name(),
-			 'USER' => remote_user(),
-			 'BASEDIR' => '..',
-			);
-	    print $tmpl->output;
-	    exit;
+	    die "不明な命令です。";
 	}
     } else {
-	print $q->redirect("./browse.cgi");
+	die "不明な命令です。";
     }
+}
+
+sub editgroup_form() {
+    my $retstr = "<form action=\"./addgroup.cgi\" method=\"GET\">\n";
+    my %group = util::get_groupinfo("../group.txt");
+    my $name = $group{$groupid}->{'name'};
+    $retstr .= <<EOF;
+グループ名：<input type="text" name="name" value="$name" size="30">
+<input type="hidden" name="cmd" value="editgroup">
+<input type="hidden" name="groupid" value="$groupid">
+<input type="submit" name="submit" value="変更">
+</form>
+EOF
+    $retstr .= "<ul>\n";
+    foreach my $subid (@{$group{$groupid}->{'list'}}) {
+	$retstr .= <<EOF;
+<li><a href="./browse.cgi?id=$subid">$subid</a>
+<span class="button" style="margin:1em;"><a href="./addgroup.cgi?cmd=deldb;groupid=$groupid;dbid=$subid">[削除]</a></span>
+EOF
+    }
+    $retstr .= "</ul>\n";
+    return $retstr;
 }

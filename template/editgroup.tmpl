@@ -1,0 +1,14 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl>
+
+<p>グループを編集します。</p>
+<ul>
+<li>
+<form method="POST" action="<TMPL_VAR NAME=SCRIPT_NAME>">
+<input type="hidden" name="cmd" value="delgroup">
+<input type="hidden" name="groupid" value="<TMPL_VAR NAME=GROUPID>">
+<input type="submit" name="submit" value=" グループの削除 ">
+</form>
+<li><TMPL_VAR NAME=EDITGROUP_FORM>
+</ul>
+<TMPL_INCLUDE NAME=footer.tmpl>

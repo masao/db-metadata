@@ -43,3 +43,7 @@ div.bbs-form {
   margin-left: 2em;
   margin-top: 0.5em;
 }
+
+span.button {
+  font-size: smaller;
+}

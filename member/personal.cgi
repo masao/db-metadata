@@ -49,10 +49,12 @@ sub my_grouplist() {
 	}
     }
     foreach my $id (@mygroups) {
-	$retstr .= "<h3>". $info{$id}->{'name'} ."</h3>\n";
+	$retstr .= "<div><span style=\"font-weight:bold;font-size:larger;\">". $info{$id}->{'name'} ."</span>\n";
+	$retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
 	$retstr .= "<ul>\n";
 	foreach my $subid (@{$info{$id}->{'list'}}) {
 	    $retstr .= "<li><a href=\"./browse.cgi?id=$subid\">$subid</a>\n";
+	    # $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=delgroup;id=$subid\">[削除]</a></span>\n";
 	}
 	$retstr .= "</ul>\n";
     }
