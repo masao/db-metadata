@@ -136,6 +136,15 @@ sub escape_html($) {
     return $str;
 }
 
+# 配列の内容を uniq する
+sub uniq(@) {
+    my (@in) = @_;
+    my %saw = ();
+    @saw{@in} = ();
+    my @out = sort keys %saw;  # remove sort if undesired
+    return @out;
+}
+
 # 汚染されている変数をキレイにする。（CGI::Untaint のローカル実装）
 sub untaint($$$) {
     my ($tainted, $pattern, $default) = (@_);

@@ -119,7 +119,18 @@ sub main {
 sub do_search(@) {
     my (@files) = @_;
     my @result = ();
-    if (length($search)) {	# 検索
+    if (length($search) && ($field eq "group")) {
+	my %group = util::get_groupinfo("$BASEDIR/group.txt");
+	foreach my $groupid (keys %group) {
+	    if ($group{$groupid}->{'name'} =~ /$search/io) {
+		push @result, map { "$_.xml" } @{$group{$groupid}->{'list'}};
+	    }
+	}
+	print STDERR "group field: ". scalar(keys %group) ."\n";
+	print STDERR join(", ", @result) . "\n";
+	@result = util::uniq(@result);
+	print STDERR join(", ", @result) . "\n";
+    } elsif (length($search)) {
 	foreach my $file (@files) {
 	    my $cont = util::readfile("$conf::DATADIR/$file");
 	    if (length($field)) {		       	# フィールド検索
