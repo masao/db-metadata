@@ -9,7 +9,17 @@
     <tr valign="top">
       <td><xsl:value-of select="//id"/></td>
       <td><a href="browse.cgi?id={$id}"><xsl:value-of select="//dbname"/></a></td>
-      <td><xsl:value-of select="//description"/></td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="string-length(//description) > 80">
+            <xsl:value-of select="substring(//description,0,80)"/>...
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="//description"/>
+          </xsl:otherwise>
+        </xsl:choose>
+
+      </td>
       <td><xsl:apply-templates select="//subject" /></td>
     </tr>
   </xsl:template>
