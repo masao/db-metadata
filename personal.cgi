@@ -92,11 +92,16 @@ sub my_grouplist() {
 }
 
 sub my_dblist() {
+    my @files = util::pickup_files();
+    my @mydb = ();
+    foreach my $file (@files) {
+	my $cont = util::readfile("$BASEDIR/$conf::DATADIR/$file");
+	if ((util::get_tagvalues($cont, "userid"))[0] eq $userid) {
+	    $file =~ s/\.xml$//g;
+	    push @mydb, $file;
+	}
+    }
     my $retstr = '<ul>';
-    my %hash = ();
-    tie(%hash, 'DB_File', "$BASEDIR/userid.db", O_RDONLY) ||
-	die "tie fail: userid.db: $!";
-    my @mydb = split(/,/, $hash{$userid});
     foreach my $id (@mydb) {
 	$retstr .= "<li><a href=\"./browse.cgi?id=$id\">" . util::get_dbname($id) . "</a>\n";
     }
