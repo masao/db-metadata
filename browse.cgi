@@ -132,17 +132,10 @@ sub do_search(@) {
 # DBファイルから scan 対象のソート済リストを返す
 sub get_scan_list() {
     my %hash = ();
-    
     if ($scan eq "group") {
-	my $fh = util::fopen("$BASEDIR/group.txt");
-	while (defined(my $line = <$fh>)) {
-	    if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
-		my $groupid = $1;
-		my $user = $2;
-		my $groupname = $3;
-		my @list = split(',',$4);
-		$hash{$groupid} = $4;
-	    }
+	my %group = util::get_groupinfo("$BASEDIR/group.txt");
+	foreach my $groupid (keys %group) {
+	    $hash{$groupid} = join(',', @{$group{$groupid}->{'list'}});
 	}
     } else {
 	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
@@ -157,22 +150,12 @@ sub scan_list(@) {
     my $result = "";
     my %hash = ();
     if ($scan eq "group") {
-	my $fh = util::fopen("$BASEDIR/group.txt");
-	my %namehash = ();
-	while (defined(my $line = <$fh>)) {
-	    if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
-		my $groupid = $1;
-		my $user = $2;
-		my $groupname = $3;
-		my @glist = split(',',$4);
-		$hash{$groupid} = $4;
-		$namehash{$groupid} = $groupname;
-	    }
-	}
+	my %group = util::get_groupinfo("$BASEDIR/group.txt");
 	for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
 	    my $key = $list[$i];
-	    $result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">$namehash{$key}</a>";
-	    $result .= " (". count_num($hash{$key}) .")\n";
+	    $result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">";
+	    $result .= $group{$key}->{'name'} ."</a>";
+	    $result .= " (". scalar(@{$group{$key}->{'list'}}) .")\n";
 	}
     } else {
 	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
@@ -196,11 +179,9 @@ sub count_num($) {
 sub get_scanned_files($$) {
     my ($dbname, $str) = @_;
     if ($dbname eq "group") {
-	my $fh = util::fopen("$BASEDIR/group.txt");
-	while (defined(my $line = <$fh>)) {
-	    if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/ && $str eq $1) {
-		return map { "$_.xml" } split(/,/, $4);
-	    }
+	my %group = util::get_groupinfo("$BASEDIR/group.txt");
+	if (defined($group{$str})) {
+	    return map { "$_.xml" } @{$group{$str}->{'list'}};
 	}
     } else {
 	my %hash = ();
@@ -208,7 +189,7 @@ sub get_scanned_files($$) {
 	    die "tie fail: $dbname.db: $!";
 	return map { "$_.xml" } split(/,/, $hash{$str});
     }
-    return();
+    return ();
 }
 
 sub list_table(@) {
@@ -268,19 +249,12 @@ sub exec_xslt($$%) {
 sub group_list($) {
     my ($id) = @_;
     my $retstr = "";
-    my $fh = util::fopen("$BASEDIR/group.txt");
-
-    while (defined(my $line = <$fh>)) {
-	if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
-	    my $groupid = $1;
-	    my $user = $2;
-	    my $groupname = $3;
-	    my @list = split(',',$4);
-
-	    foreach my $subid (@list) {
-		if ($subid eq $id) {
-		    $retstr .= "<li><a href=\"?scan=group;search=$groupid\">$user $groupname</a>";
-		}
+    my %group = util::get_groupinfo("$BASEDIR/group.txt");
+    foreach my $groupid (keys %group) {
+	foreach my $subid (@{$group{$groupid}->{'list'}}) {
+	    if ($subid eq $id) {
+		$retstr .= "<li><a href=\"?scan=group;search=$groupid\">$user";
+		$retstr .= $group{$groupid}->{'name'} ."</a>";
 	    }
 	}
     }
