@@ -33,87 +33,80 @@ $ROOT_ELEMENT = 'データベース';
 ### HTML の <form> 部品の定義
 
 # フォーム部品のラベル（名前）
-%PARAM_LABELS = ('user' => '登録者',
-		 'username' => '登録者名',
-		 'e-mail' => 'E-mail',# メール通知する場合は必要（宛先）
-		 'url' => 'URL',
-
-		 'dbid' => 'データベースID',
-		 'dbname' => 'データベース名',
-		 'dbname_yomi' => 'データベース名・ヨミ',
-		 'system' => 'システム名',
-		 'system_yomi' => 'システム名・ヨミ',
-		 'producer' => 'プロデューサ名',
-		 'producer_yomi' => 'プロデューサ名・ヨミ',
-		 'producer_country' => 'プロデューサ国名',
-		 'distributor' => 'ディストリビュータ名',
-		 'distributor_yomi' => 'ディストリビュータ名・ヨミ',
-		 'distributor_country' => 'ディストリビュータ国名',
-
-		 'description' => 'データベースの特徴',
-		 'field' => '分野',
-		 'subfield' => '分野',
-		 'keyword' => 'キーワード',
-		 'type' => 'データのタイプ',
-		 'publication' => '冊子体名',
-		 'survey' => '調査名',
-		 'lang' => 'データの記述言語',
-		 'period' => '収録期間',
-		 'total' => '収録件数',
-		 'interval' => '更新周期',
-		 'interval_num' => '更新件数',
-		 'region' => '収録情報の地域',
-
-		 'service_type' => 'サービス種別',
-		 'distribute_type' => 'データ提供形態',
-		 'terminal_type' => '端末種別',
-		 'fee' => 'サービス料金',
-		 'time' => 'サービス時間帯',
-		 'condition' => '使用条件',
-		 'comment' => 'コメント',
-		 'date' => '登録日'
+%PARAM_LABELS = (
+		 'dbid' =>  "データベースID",
+		 'userid' =>  "ユーザID",
+		 'system' =>  "システム名",
+		 'system_yomi' =>  "システム名・ヨミ",
+		 'distributor' =>  "ディストリビュータ",
+		 'distributor_yomi' =>  "ディストリビュータ・ヨミ",
+		 'distributor_country' =>  "ディストリビュータ国名",
+		 'service_type' =>  "サービス種別",
+		 'distribute_type' =>  "配布種別",
+		 'terminal_type' =>  "端末種別",
+		 'fee' =>  "利用料金",
+		 'time' =>  "利用時間",
+		 'condition' =>  "利用条件",
+		 'comment' =>  "コメント",
+		 'dbname' =>  "データベース名",
+		 'dbname_yomi' =>  "データベース名・ヨミ",
+		 'producer' =>  "プロデューサ",
+		 'producer_yomi' =>  "プロデューサ・ヨミ",
+		 'producer_country' =>  "プロデューサ国名",
+		 'description' =>  "特徴",
+		 'field' =>  "分野",
+		 'keyword' =>  "キーワード",
+		 'type' =>  "対象とするデータ種別",
+		 'publication' =>  "冊子体名",
+		 'survey' =>  "調査名",
+		 'lang' =>  "言語",
+		 'period' =>  "収録期間",
+		 'total' =>  "収録件数",
+		 'interval' =>  "更新周期",
+		 'interval_num' =>  "更新件数",
+		 'region' =>  "対象地域"
 		);
 
 # フォーム部品の表示順序、CVSファイルへの登録順も兼ねる
-@PARAMETERS = ('user',
+@PARAMETERS = qw(
+	       dbname
+	       dbname_yomi
 
-	       'dbname',
-	       'dbname_yomi',
-	       'system',
-	       'system_yomi',
-	       'producer',
-	       'producer_yomi',
-	       'producer_country',
-	       'distributor',
-	       'distributor_yomi',
-	       'distributor_country',
+	       description
+	       field
+	       keyword
 
-	       'description',
-	       'field',
-	       'keyword',
-	       'type',
-	       'publication',
-	       'survey',
-	       'lang',
-	       'period',
-	       'total',
-	       'interval',
-	       'interval_num',
-	       'region',
-
-	       'service_type',
-	       'distribute_type',
-	       'terminal_type',
-	       'fee',
-	       'time',
-	       'condition',
-	       'comment',
-	       'date'
+	       dbid
+	       userid
+	       system
+	       system_yomi
+	       distributor
+	       distributor_yomi
+	       distributor_country
+	       service_type
+	       distribute_type
+	       terminal_type
+	       fee
+	       time
+	       condition
+	       comment
+	       producer
+	       producer_yomi
+	       producer_country
+	       type
+	       publication
+	       survey
+	       lang
+	       period
+	       total
+	       interval
+	       interval_num
+	       region
 	      );
 
 # フォーム部品のうち、必須入力項目のもの
 # （「e-mail」の場合はメールアドレスの簡易チェックも行う）
-%REQ_PARAMETERS = ('username' => 1,
+%REQ_PARAMETERS = (
 		   'dbname' => 1,
 #		   'description' => 1,
 		  );
@@ -122,43 +115,38 @@ $ROOT_ELEMENT = 'データベース';
 #
 # 「external」は登録時に動的に情報を追加したい場合に用いる。
 #
-%PARAM_TYPES = ('user' => 'nest:username:e-mail:url',
-		'username' => 'textfield:40',
-		'e-mail' => 'textfield:40',# メール通知する場合は必要（宛先）
-		'url' => 'textfield:40',
-
-		'dbname'=> 'textfield:40',
-		'dbname_yomi'=> 'textfield:40',
-		'system'=> 'textfield:40',
-		'system_yomi'=> 'textfield:40',
-		'producer'=> 'textfield:40',
-		'producer_yomi'=> 'textfield:40',
-		'producer_country'=> 'textfield:40',
-		'distributor'=> 'textfield:40',
-		'distributor_yomi'=> 'textfield:40',
-		'distributor_country'=> 'textfield:40',
-
-		'description'=> 'textarea:5:60',
-		'field'=> 'textfield:40',
-		'keyword'=> 'textfield:40',
-		'type'=> 'textfield:40',
-		'publication'=> 'textfield:40',
-		'survey'=> 'textfield:40',
-		'lang'=> 'textfield:40',
-		'period'=> 'textfield:40',
-		'total'=> 'textfield:40',
-		'interval'=> 'textfield:40',
-		'interval_num'=> 'textfield:40',
-		'region'=> 'textfield:40',
-
-		'service_type'=> 'textfield:40',
-		'distribute_type'=> 'textfield:40',
-		'terminal_type'=> 'textfield:40',
-		'fee' => 'textfield:40',
-		'time' => 'textfield:40',
-		'condition' => 'textfield:40',
-		'comment' => 'textarea:4:60',
-		'date' => 'external:sprintf("%d-%02d-%02d",(localtime)[5]+1900,(localtime)[4]+1,(localtime)[3])',
+%PARAM_TYPES = (
+		'dbid' =>  "hidden",
+		'userid' =>  "hidden",
+		'system' =>  'textfield:60',
+		'system_yomi' =>  'textfield:60',
+		'distributor' =>  'textfield:60',
+		'distributor_yomi' =>  'textfield:60',
+		'distributor_country' =>  'textfield:60',
+		'service_type' =>  'textfield:60',
+		'distribute_type' =>  'textfield:60',
+		'terminal_type' =>  'textfield:60',
+		'fee' =>  'textfield:60',
+		'time' =>  'textfield:60',
+		'condition' =>  'textfield:60',
+		'comment' =>  'textfield:60',
+		'dbname' =>  'textfield:60',
+		'dbname_yomi' =>  'textfield:60',
+		'producer' =>  'textfield:60',
+		'producer_yomi' =>  'textfield:60',
+		'producer_country' =>  'textfield:60',
+		'description' =>  'textarea:5:60',
+		'field' =>  'textfield:60',
+		'keyword' =>  'textfield:60',
+		'type' =>  'textfield:60',
+		'publication' =>  'textfield:60',
+		'survey' =>  'textfield:60',
+		'lang' =>  'textfield:60',
+		'period' =>  'textfield:60',
+		'total' =>  'textfield:60',
+		'interval' =>  'textfield:60',
+		'interval_num' =>  'textfield:60',
+		'region' =>  'textfield:60',
 	       );
 
 # repeatable な入力項目
