@@ -4,6 +4,6 @@
 <input type="hidden" name="cmd" value="newgroup">
 Group Name: <input type="text"   name="name" value="" size="30"><br>
 Description: <input type="text" name="description" value="" size="60">
-<input type="submit" name="submit" value=" Submit ">
+<input type="submit" name="submit" value=" Create a new group ">
 </form>
 </div>
