@@ -43,11 +43,12 @@ sub main {
     if (defined $id) {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse-id.tmpl');
 	my $content = exec_xslt("data/$id.xml", "template/browse-id.xsl");
-	$tmpl->param('TITLE' => $conf::TITLE,
+	$tmpl->param('TITLE' => "データベース情報の閲覧",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
-		     'CONTENT' => $content);
+		     'CONTENT' => $content,
+		     'ID' => $id);
 	print $tmpl->output;
     } else {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse.tmpl');
@@ -145,8 +146,7 @@ sub fncmp() {
 }
 
 # For avoiding "used only once: possible typo at ..." warnings.
-util::muda($conf::TITLE,
-	   $conf::HOME_TITLE,
+util::muda($conf::HOME_TITLE,
 	   $conf::HOME_URL,
 	   $conf::FROM,
 	  );
