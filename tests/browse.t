@@ -5,7 +5,7 @@
 use strict;
 use Test;
 
-BEGIN { plan test => 9 }
+BEGIN { plan test => 10 }
 
 my $cgi = "./browse.cgi";
 my @test_args =
@@ -13,6 +13,7 @@ my @test_args =
      "id=unknown",
      "search=新聞",
      "scan=keyword",
+     "id=0356", # データ項目が少なめ
      "id=8139", # 一番データが多い
      "id=9354", # 最後のid
      "scan=keyword search=PC",
