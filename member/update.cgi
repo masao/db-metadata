@@ -63,6 +63,7 @@ EOF
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
+		     'USER' => remote_user(),
 		     'REPORT' => $report,
 		    );
 	print header();
@@ -81,6 +82,7 @@ EOF
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
 		     'SCRIPT_NAME' => script_name(),
+		     'USER' => remote_user(),
 		     # 'ERROR' => $error,
 		     'FORM_CONTROL' => param2form(@conf::PARAMETERS),
 		     'REQ_MARK' => $conf::REQ_MARK,
@@ -141,7 +143,7 @@ sub param2xml (@) {
     my $xml = '';
     for my $entry (@parameters) {
 	my $value = CGI::escapeHTML(param($entry));
-	my $tag = $conf::PARAM_LABELS{$entry};
+	my $tag = $entry; # $conf::PARAM_LABELS{$entry};
 	my ($type, @args) =split(/:/, $conf::PARAM_TYPES{$entry});
 	if ($type eq "textfield") {
 	    if (defined $conf::PARAM_REPEATABLES{$entry} &&
