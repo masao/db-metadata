@@ -57,7 +57,8 @@ sub main {
 		     'UPDATABLE' => $updatable,
 		     'ID' => $id,
 		     'BBS-LIST' => util::bbs_list($id, $BASEDIR),
-		     'GROUP-LIST'=> group_list($id)
+		     'GROUP-LIST'=> group_list($id),
+		     'ADDGROUP-FORM' => addgroup_form(),
 		    );
 	print $tmpl->output;
     } elsif (defined $scan) {
@@ -284,6 +285,29 @@ sub group_list($) {
 	}
     }
     return length($retstr)? "<ul>$retstr</ul>" : undef;
+}
+
+sub addgroup_form() {
+    my $retstr = '';
+    my %info = util::get_groupinfo("$BASEDIR/group.txt", $user);
+    if (scalar keys %info) {
+	$retstr = <<EOF;
+<form action="./addgroup.cgi" method="get">
+<input type="hidden" name="cmd" value="addgroup">
+<input type="hidden" name="dbid" value="$id">
+<select name="groupid">
+  <option value=""> -- グループ選択 -- </option>
+EOF
+	foreach my $id (keys %info) {
+	    $retstr .= "  <option value=\"$id\">". $info{$id}->{'name'} ."</option>\n";
+	}
+	$retstr .= <<EOF;
+</select>
+<input type="submit" value=" グループに追加する ">
+</form>
+EOF
+    }
+    return $retstr;
 }
 
 # 数字を考慮したソート

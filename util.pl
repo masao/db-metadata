@@ -40,12 +40,13 @@ EOF
 }
 
 # グループ情報を取出す
-sub get_groupinfo($) {
-    my ($fname) = @_;
+sub get_groupinfo($$) {
+    my ($fname, $user) = @_;
     my %info = ();
     my $fh = fopen($fname);
     while (defined(my $line = <$fh>)) {
 	if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
+	    next if (defined($user) && $user ne $2);
 	    $info{$1} = {'user' => $2,
 			 'name' => $3,
 			 'list' => [ split(',', $4) ]
