@@ -99,10 +99,10 @@ sub main {
 	$cont =~ s/<id>$include<\/id>/<id>$id<\/id>/g;
 	$cont =~ s/<source_id\/>/<source_id>$include<\/source_id>/g;
 	$cont =~ s/<source_id>(.*)<\/source_id>/<source_id>$include<\/source_id>/g;
-	if ($q->remote_user() ne (util::get_tagvalues($cont, "userid"))[0]) {
-	    print $q->redirect("./browse.cgi?id=$id");
-	    exit;
-	}
+#	if ($q->remote_user() ne (util::get_tagvalues($cont, "userid"))[0]) {
+#	    print $q->redirect("./browse.cgi?id=$id");
+#	    exit;
+#	}
 
 	print header("text/html; charset=utf-8");
 	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
