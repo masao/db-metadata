@@ -5,6 +5,7 @@
 # 登録/更新用 CGI
 
 use strict;
+use vars qw($MSG);
 use POSIX;
 use DB_File;
 use CGI;
@@ -27,40 +28,23 @@ $BASEDIR = ".." if defined $user;
 unshift @INC, $BASEDIR;
 require 'util.pl';
 require 'conf.pl';	# 設定内容を読み込む
+require 'message.pl';
 
 main();
 sub main {
     print $q->header("text/html; charset=utf-8");
-    my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/personal.tmpl");
-    $tmpl->param('TITLE' => "$userid さんのページ",
+    my $tmpl = HTML::Template->new('filename' => util::template_fname("$BASEDIR/template/personal.tmpl"));
+    $tmpl->param('TITLE' => sprintf($$MSG{$conf::LANG}{'personal_page'}, $userid),
 		 'HOME_TITLE' => $conf::HOME_TITLE,
 		 'HOME_URL' => $conf::HOME_URL,
 		 'FROM' => $conf::FROM,
-#		 'SCRIPT_NAME' => "browse.cgi",
 		 'USER' => $user,
 		 'BASEDIR' => $BASEDIR,
-		 'ADDGROUP_FORM' => addgroup_form(),
 		 'MYGROUP' => my_grouplist(),
 		 'MYDB' => my_dblist(),
+		 'IS_MYPAGE' => $user eq $userid,
 		);
     print $tmpl->output;
-}
-
-sub addgroup_form () {
-    my $retstr = "";
-    if ($user eq $userid) {
-	$retstr = <<EOF;
-<div class="addgroup-form">
-<form method="POST" action="./addgroup.cgi">
-<input type="hidden" name="cmd" value="newgroup">
-新規グループ名: <input type="text"   name="name" value="" size="30"><br>
-説明: <input type="text" name="description" value="" size="60">
-<input type="submit" name="submit" value=" 登 録 ">
-</form>
-</div>
-EOF
-    }
-    return $retstr;
 }
 
 sub my_grouplist() {

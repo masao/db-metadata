@@ -1,0 +1,10 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl.en>
+<h2>Registered Groups:</h2>
+<TMPL_IF NAME=IS_MYPAGE>
+<TMPL_INCLUDE NAME=addgroup-form.tmpl.en>
+</TMPL_IF>
+<TMPL_VAR NAME=MYGROUP>
+<h2>Registered Databases:</h2>
+<TMPL_VAR NAME=MYDB>
+<TMPL_INCLUDE NAME=footer.tmpl.en>

@@ -1,7 +1,9 @@
 <!-- -*- html-helper -*- -->
 <TMPL_INCLUDE NAME=header.tmpl>
 <h2>登録グループ一覧</h2>
-<TMPL_VAR NAME=ADDGROUP_FORM>
+<TMPL_IF NAME=IS_MYPAGE>
+<TMPL_INCLUDE NAME=addgroup-form.tmpl>
+</TMPL_IF>
 <TMPL_VAR NAME=MYGROUP>
 <h2>登録データベース一覧</h2>
 <TMPL_VAR NAME=MYDB>
