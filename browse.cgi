@@ -12,8 +12,9 @@ $| = 1;
 
 # CGIパラメータ
 my $q = new CGI;
-my $SCRIPT_NAME = $q->script_name();
+my $SCRIPT_NAME = CGI::escapeHTML($q->script_name());
 my $page = CGI::escapeHTML($q->param('page')) || 0;
+$page = int($page);
 my $search = CGI::escapeHTML($q->param('search')) || "";
 my $sort = CGI::escapeHTML($q->param('sort')) || 0;
 my $id = CGI::escapeHTML($q->param('id'));
