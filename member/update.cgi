@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -wT
+#!/usr/local/bin/perl -w
 # -*- CPerl -*-
 # $Id$
 
@@ -52,7 +52,7 @@ sub main {
 
 	# lockdir();
 	my $id = util::untaint($q->param('id'), '\d+', undef) || get_id();
-	my $fh = util::fopen(">$conf::DATADIR/$id.xml");
+	my $fh = util::fopen(">../$conf::DATADIR/$id.xml");
 	print $fh param2xml($id);
 	$fh->close;
 
