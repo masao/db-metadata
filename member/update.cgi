@@ -216,25 +216,17 @@ sub param2xml($) {
   <created_date>$date</created_date>
   <update_date>$date</update_date>
   <userid>$user</userid>
-  <system>$Q::system</system>
-  <system_yomi>$Q::system_yomi</system_yomi>
-EOF
-    $xml .= repeatable_tags("contributor");
-    $xml .= repeatable_tags("service_type");
-    $xml .= repeatable_tags("format");
-    $xml .= repeatable_tags("terminal_type");
-    $xml .= <<EOF;
-  <condition>$Q::condition</condition>
   <dbname>$Q::dbname</dbname>
-  <dbname_yomi>$Q::dbname_yomi</dbname_yomi>
+  <system>$Q::system</system>
+  <condition>$Q::condition</condition>
+EOF
+    $xml .= repeatable_tags("format");
+    $xml .= repeatable_tags("contributor");
+    $xml .= <<EOF;
   <description>$Q::description</description>
 EOF
     $xml .= repeatable_tags("subject");
     $xml .= repeatable_tags("type");
-    $xml .= <<EOF;
-  <publication>$Q::publication</publication>
-  <survey>$Q::survey</survey>
-EOF
     $xml .= repeatable_tags("lang");
     $xml .= <<EOF;
   <period>$Q::period</period>
@@ -242,6 +234,8 @@ EOF
   <interval>$Q::interval</interval>
   <interval_num>$Q::interval_num</interval_num>
   <region>$Q::region</region>
+  <category/>
+  <access/>
 </database_metadata>
 EOF
     return $xml;
@@ -250,7 +244,9 @@ EOF
 sub repeatable_tags($) {
     my ($tag) = @_;
     my $xml = "";
-    if (index($q->param($tag), ",")) {
+    if (!defined($q->param($tag)) || !length($q->param($tag))) {
+	$xml = "  <$tag/>\n";
+    } elsif (index($q->param($tag), ",")) {
 	my @values = split(/,/, CGI::escapeHTML($q->param($tag)));
 	for my $val (@values) {
 	    $xml .= "  <$tag>$val</$tag>\n";
