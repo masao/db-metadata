@@ -39,6 +39,35 @@ EOF
     return $retstr;
 }
 
+# グループ情報を取出す
+sub get_groupinfo($) {
+    my ($fname) = @_;
+    my %info = ();
+    my $fh = fopen($fname);
+    while (defined(my $line = <$fh>)) {
+	if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
+	    $info{$1} = {'user' => $2,
+			 'name' => $3,
+			 'list' => [ split(',', $4) ]
+			};
+	    print $line;
+	}
+    }
+    return %info;
+}
+
+# グループ情報を書出す
+sub write_groupinfo($%) {
+    my ($fname, %info) = @_;
+    my $fh = fopen(">$fname");
+    foreach my $id (keys %info) {
+	print $fh "$id\t";
+	print $fh $info{$id}->{"user"} .":". $info{$id}->{"name"} ."\t";
+	print $fh join(",", @{$info{$id}->{'list'}});
+	print $fh "\n";
+    }
+}
+
 sub write_csv($@) {
     my ($fname, @values) = @_;
     my $fh = fopen(">>$fname");
