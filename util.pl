@@ -9,6 +9,14 @@ use IO::File;
 my $NKF = '/usr/local/bin/nkf';
 my $SENDMAIL = '/usr/lib/sendmail';
 
+sub pickup_files() {
+    my @files = ();
+    opendir(DIR, $conf::DATADIR) || die "opendir: $conf::DATADIR: $!";
+    @files = sort grep(/^\d+\.xml$/, readdir(DIR));
+    closedir(DIR) || die "closedir: $!";
+    return @files;
+}
+
 sub write_csv($@) {
     my ($fname, @values) = @_;
     my $fh = fopen(">>$fname");

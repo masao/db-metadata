@@ -52,7 +52,7 @@ sub main {
 	print $tmpl->output;
     } else {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse.tmpl');
-	my @files = pickup_files();
+	my @files = util::pickup_files();
 	@files = do_search(@files);
 
 	$tmpl->param('TITLE' => "データベース情報の閲覧",
@@ -67,14 +67,6 @@ sub main {
 		    );
 	print $tmpl->output;
     }
-}
-
-sub pickup_files() {
-    my @files = ();
-    opendir(DIR, $conf::DATADIR) || die "opendir: $conf::DATADIR: $!";
-    @files = sort grep(/^\d+\.xml$/, readdir(DIR));
-    closedir(DIR) || die "closedir: $!";
-    return @files;
 }
 
 sub do_search(@) {
