@@ -54,7 +54,8 @@ $ROOT_ELEMENT = 'データベース';
 		 'interval_num' =>  "更新件数",
 		 'region' =>  "対象地域",
 		 'category' =>  "カテゴリ",
-		 'access' =>  "アクセス先"
+		 'access' =>  "アクセス先",
+		 'group', =>  "グループ名",
 		);
 
 # フォーム部品の表示順序、CVSファイルへの登録順も兼ねる

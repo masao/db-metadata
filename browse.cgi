@@ -57,6 +57,7 @@ sub main {
 		     'UPDATABLE' => $updatable,
 		     'ID' => $id,
 		     'BBS-LIST' => util::bbs_list($id, $BASEDIR),
+		     'GROUP-LIST'=> group_list($id)
 		    );
 	print $tmpl->output;
     } elsif (defined $scan) {
@@ -130,8 +131,22 @@ sub do_search(@) {
 # DBファイルから scan 対象のソート済リストを返す
 sub get_scan_list() {
     my %hash = ();
-    tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
-	die "tie fail: $scan.db: $!";
+    
+    if ($scan eq "group") {
+	my $fh = util::fopen("$BASEDIR/group.txt");
+	while (defined(my $line = <$fh>)) {
+	    if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
+		my $groupid = $1;
+		my $user = $2;
+		my $groupname = $3;
+		my @list = split(',',$4);
+		$hash{$groupid} = $4;
+	    }
+	}
+    } else {
+	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
+	    die "tie fail: $scan.db: $!";
+    }
     my @list = sort { count_num($hash{$b}) <=> count_num($hash{$a}) || $a cmp $b } keys %hash;
     return @list;
 }
@@ -140,12 +155,32 @@ sub scan_list(@) {
     my (@list) = @_;
     my $result = "";
     my %hash = ();
-    tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
-	die "tie fail: $scan.db: $!";
-    for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
-	my $key = $list[$i];
-	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">$key</a>";
-	$result .= " (". count_num($hash{$key}) .")\n";
+    if ($scan eq "group") {
+	my $fh = util::fopen("$BASEDIR/group.txt");
+	my %namehash = ();
+	while (defined(my $line = <$fh>)) {
+	    if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
+		my $groupid = $1;
+		my $user = $2;
+		my $groupname = $3;
+		my @glist = split(',',$4);
+		$hash{$groupid} = $4;
+		$namehash{$groupid} = $groupname;
+	    }
+	}
+	for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
+	    my $key = $list[$i];
+	    $result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">$namehash{$key}</a>";
+	    $result .= " (". count_num($hash{$key}) .")\n";
+	}
+    } else {
+	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
+	    die "tie fail: $scan.db: $!";
+	for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
+	    my $key = $list[$i];
+	    $result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">$key</a>";
+	    $result .= " (". count_num($hash{$key}) .")\n";
+	}
     }
     return $result;
 }
@@ -159,10 +194,20 @@ sub count_num($) {
 # scan+search条件に合致するファイル名を返す。
 sub get_scanned_files($$) {
     my ($dbname, $str) = @_;
-    my %hash = ();
-    tie(%hash, 'DB_File', "$BASEDIR/$dbname.db", O_RDONLY) ||
-	die "tie fail: $dbname.db: $!";
-    return map { "$_.xml" } split(/,/, $hash{$str});
+    if ($dbname eq "group") {
+	my $fh = util::fopen("$BASEDIR/group.txt");
+	while (defined(my $line = <$fh>)) {
+	    if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/ && $str eq $1) {
+		return map { "$_.xml" } split(/,/, $4);
+	    }
+	}
+    } else {
+	my %hash = ();
+	tie(%hash, 'DB_File', "$BASEDIR/$dbname.db", O_RDONLY) ||
+	    die "tie fail: $dbname.db: $!";
+	return map { "$_.xml" } split(/,/, $hash{$str});
+    }
+    return();
 }
 
 sub list_table(@) {
@@ -216,6 +261,29 @@ sub exec_xslt($$%) {
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
     my $result = $stylesheet->transform($source, %param);
     return $stylesheet->output_string($result);
+}
+
+# グループの表示
+sub group_list($) {
+    my ($id) = @_;
+    my $retstr = "";
+    my $fh = util::fopen("$BASEDIR/group.txt");
+
+    while (defined(my $line = <$fh>)) {
+	if ($line =~ /^([^\t]+)\t([^:]+):([^\t]+)\t(.*)$/){
+	    my $groupid = $1;
+	    my $user = $2;
+	    my $groupname = $3;
+	    my @list = split(',',$4);
+
+	    foreach my $subid (@list) {
+		if ($subid eq $id) {
+		    $retstr .= "<li><a href=\"?scan=group;search=$groupid\">$user $groupname</a>";
+		}
+	    }
+	}
+    }
+    return length($retstr)? "<ul>$retstr</ul>" : undef;
 }
 
 # 数字を考慮したソート
