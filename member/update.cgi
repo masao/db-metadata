@@ -92,6 +92,31 @@ sub main {
 		     'REQ_MARK' => $conf::REQ_MARK,
 		    );
 	print $tmpl->output;
+    } elsif (defined($q->param('include'))) {	# 取り込み入力フォーム生成
+	my $include = $q->param('include');
+	my $id = get_id();
+	my $cont = util::readfile("$conf::DATADIR/$include.xml");
+	$cont =~ s/<id>$include<\/id>/<id>$id<\/id>/g;
+	$cont =~ s/<source_id\/>/<source_id>$include<\/source_id>/g;
+	$cont =~ s/<source_id>(.*)<\/source_id>/<source_id>$include<\/source_id>/g;
+	if ($q->remote_user() ne (util::get_tagvalues($cont, "userid"))[0]) {
+	    print $q->redirect("./browse.cgi?id=$id");
+	    exit;
+	}
+
+	print header("text/html; charset=utf-8");
+	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
+	$tmpl->param('TITLE' => $conf::TITLE,
+		     'HOME_TITLE' => $conf::HOME_TITLE,
+		     'HOME_URL' => $conf::HOME_URL,
+		     'FROM' => $conf::FROM,
+		     'SCRIPT_NAME' => script_name(),
+		     'USER' => remote_user(),
+		     'BASEDIR' => '..',
+		     'FORM_CONTROL' => param2form_update($cont, @conf::PARAMETERS),
+		     'REQ_MARK' => $conf::REQ_MARK,
+		    );
+	print $tmpl->output;
     } else {				# 新規登録フォーム生成
 	print header("text/html; charset=utf-8");
 	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
@@ -216,7 +241,7 @@ sub param2xml($) {
 <!DOCTYPE database_metadata SYSTEM "db.dtd">
 <database_metadata>
   <id>$id</id>
-  <source_id/>
+  <source_id>$Q::source_id</source_id>
   <created_date>$date</created_date>
   <update_date>$date</update_date>
   <userid>$user</userid>
