@@ -54,7 +54,8 @@ sub main {
 	$report .= $conf::REPORT_FOOTER;
 
 	# CSVファイルに書き込む
-	util::write_csv($conf::FILENAME, map { param($_) } @conf::PARAMETERS);
+	util::write_csv($conf::FILENAME,
+			map { defined(param($_)) ? param($_) : '' } @conf::PARAMETERS);
 
 	print header();
 	print $conf::HTML_HEADER;
