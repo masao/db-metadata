@@ -26,7 +26,7 @@ my $BGCOLOR_HEAD = '#00A020';
 my $USE_AUTOLINK = 1;
 
 # 一覧表示の際に表示すべき項目:  @conf::PARAMETERS で定義済の値を入れる
-my @DISPLAY_ELEMENTS = ('name', 'date');
+my @DISPLAY_ELEMENTS = ('username', 'date');
 
 # CGIパラメータ
 my $q = new CGI;
