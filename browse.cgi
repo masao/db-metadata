@@ -184,6 +184,7 @@ sub scan_list(@) {
 	    $result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">";
 	    $result .= $group{$key}->{'name'} ."</a>";
 	    $result .= " (". scalar(@{$group{$key}->{'list'}}) .")\n";
+	    $result .= "<span class=\"description\">". $group{$key}->{'description'} ."</span>";
 	}
     } elsif ($scan eq "userid") {
 	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
