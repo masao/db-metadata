@@ -25,22 +25,7 @@
         <td bgcolor="#aaddaa">データベースの特徴</td>
         <td><xsl:value-of select="//description"/></td>
       </tr>
-      <tr>
-        <td bgcolor="#aaddaa">分野</td>
-        <xsl:choose>
-          <xsl:when test="//subfield">
-            <td><xsl:value-of select="//field/@label"/>
-            <a href="browse.cgi?scan=subfield;search={//field/subfield}">(<xsl:value-of select="//field/subfield"/>)</a></td>
-            
-          </xsl:when>
-          <xsl:otherwise>
-            <td><xsl:value-of select="//field/@label"/></td>
-
-          </xsl:otherwise>
-          
-        </xsl:choose>
-        
-      </tr>
+      <xsl:apply-templates select="//field" />
       <xsl:apply-templates select="//keyword" />
       <xsl:apply-templates select="//lang" />
       <tr>
@@ -111,6 +96,14 @@
     </table>
   </xsl:template>
 
+  <xsl:template match="//field">
+      <tr>
+        <td bgcolor="#aaddaa">分野</td>
+        <td><xsl:value-of select="@label"/>
+        <a href="browse.cgi?scan=field;search={.}">(<xsl:value-of select="."/>)</a></td>
+        
+      </tr>
+  </xsl:template>
   <xsl:template match="//keyword">
       <tr>
         <td bgcolor="#aaddaa">キーワード</td>

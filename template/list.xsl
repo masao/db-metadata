@@ -10,7 +10,10 @@
       <td><xsl:value-of select="//dbid"/></td>
       <td><a href="browse.cgi?id={$id}"><xsl:value-of select="//dbname"/></a></td>
       <td><xsl:value-of select="//description"/></td>
-      <td><xsl:value-of select="//field"/></td>
+      <td><xsl:apply-templates select="//field" /></td>
     </tr>
+  </xsl:template>
+  <xsl:template match="//field">
+    <xsl:value-of select="."/>;
   </xsl:template>
 </xsl:stylesheet>
