@@ -74,9 +74,11 @@ EOF
     @entries = sort { fncmp($a->[$sortby], $b->[$sortby]) } @entries;
     @entries = reverse @entries if $sort =~ /r$/;
 
-    print "<table width=\"100%\" border=\"1\" bgcolor=\"$BGCOLOR\">\n";
     if ($DISPLAY_MODE eq 'table') {
-	print "<tr bgcolor=\"$BGCOLOR_HEAD\">\n";
+	print <<EOF;
+<table width="100%" border="1" bgcolor="$BGCOLOR">
+<tr bgcolor="$BGCOLOR_HEAD">
+EOF
 	for (my $i = 0; $i < @conf::PARAMETERS; $i++) {
 	    print <<EOF;
 <th>
@@ -90,6 +92,8 @@ EOF
 
     for (my $i = $page * $MAX; $i < @entries && $i < ($page+1) * $MAX; $i++) {
 	print "<tr valign=\"top\">\n" if $DISPLAY_MODE eq 'table';
+	print "<table border=\"0\" bgcolor=\"$BGCOLOR\">\n"
+	    if $DISPLAY_MODE eq 'list';
 	my $col = 0;
 	for my $cont (@{$entries[$i]}) {
 	    $cont =~ s/^\s+//g;
@@ -100,10 +104,13 @@ EOF
 	    if ($DISPLAY_MODE eq 'table') {
 		print "<td>$cont</td>\n";
 	    } elsif ($DISPLAY_MODE eq 'list') {
-		next if !length($cont);
+		if (!length($cont)) {
+		    $col++;
+		    next;
+		}
 		print <<EOF;
 <tr>
-<th bgcolor="$BGCOLOR_HEAD">$conf::PARAM_LABELS{$conf::PARAMETERS[$col]}</th>
+<th align="center" bgcolor="$BGCOLOR_HEAD">$conf::PARAM_LABELS{$conf::PARAMETERS[$col]}</th>
 <td>$cont</td>
 </tr>
 EOF
@@ -111,8 +118,9 @@ EOF
 	    $col++;
 	}
 	print "</tr>\n" if $DISPLAY_MODE eq 'table';
+	print "</table><hr width=\"50%\">\n" if $DISPLAY_MODE eq 'list';
     }
-    print "</table>\n";
+    print "</table>\n" if $DISPLAY_MODE eq 'table';
     print_pages();
     print $conf::HTML_FOOTER;
 }
