@@ -57,13 +57,7 @@
         <td bgcolor="#aaddaa">利用条件</td>
         <td><xsl:value-of select="//condition"/></td>
       </tr>
-      <tr>
-        <td bgcolor="#aaddaa">コントリビュータ</td>
-        <td>
-          <a href="browse.cgi?scan=contributor;search={//contributor}">
-            <xsl:value-of select="//contributor"/></a>
-        </td>
-      </tr>
+      <xsl:apply-templates select="//contributor" />
       <!--
       <tr>
         <td bgcolor="#aaddaa">登録者</td>
@@ -77,7 +71,13 @@
       -->
     </table>
   </xsl:template>
-
+  <xsl:template match="//contributor">
+      <tr>
+        <td bgcolor="#aaddaa">コントリビュータ</td>
+        <td><a href="browse.cgi?scan=contributor;search={.}"><xsl:value-of select="."/></a></td>
+      </tr>
+    
+  </xsl:template>
   <xsl:template match="//subject">
       <tr>
         <td bgcolor="#aaddaa">主題</td>
