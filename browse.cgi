@@ -66,6 +66,11 @@ sub main {
 	if (length($search)) {
 	    my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse-scan-search.tmpl");
 	    my @files = get_scanned_files($scan, $search);
+	    my $description = "";
+	    if ($scan eq "group") {
+		my %group = util::get_groupinfo("$BASEDIR/group.txt");
+		$description = $group{$search}->{'description'};
+	    }
 	    $tmpl->param('TITLE' => "データベース情報の閲覧",
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
@@ -78,7 +83,8 @@ sub main {
 			 'search' => searchstr($search),
 			 'search_result' => scalar @files,
 			 'list_table' => list_table(@files),
-			 'list_page' => list_pages(@files)
+			 'list_page' => list_pages(@files),
+			 'description' => $description
 			);
 	    print $tmpl->output;
 	} else {
