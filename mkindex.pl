@@ -33,7 +33,9 @@ sub mkhash($$) {
 	foreach my $key (@values) {
 	    next unless defined $key;
 	    if (defined $hash{$key}) {
-		$hash{$key} .= ",$id";
+		if(check_id($hash{$key},$id) eq "false"){
+		    $hash{$key} .= ",$id";
+		}
 	    } else {
 		$hash{$key} = $id;
 	    }
@@ -42,4 +44,16 @@ sub mkhash($$) {
 #    foreach my $key (sort keys %hash) {
 #	print "$key => $hash{$key}\n";
 #    }
+}
+
+sub check_id($$) {
+    my ($list, $id) = @_;
+
+    my $flag = "false";
+    foreach my $kouho (split(',',$list)){
+	if($kouho eq $id){
+	    $flag = "true";
+	}
+    }
+    return $flag;
 }
