@@ -1,0 +1,9 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl.en>
+
+<p>Thank you. Your registration of information about database was completed.</p>
+<ul>
+<li><a href="./browse.cgi?id=<TMPL_VAR NAME=DBID>"><TMPL_VAR NAME=DBTITLE></a></li>
+</ul>
+
+<TMPL_INCLUDE NAME=footer.tmpl.en>

@@ -34,7 +34,7 @@ sub main {
 	}
 	if (length($error)) {
 	    print header();
-	    my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
+	    my $tmpl = HTML::Template->new('filename' => util::template_fname('../template/form.tmpl'));
 	    $tmpl->param('TITLE' => $conf::TITLE,
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
@@ -57,7 +57,7 @@ sub main {
 	$fh->close;
 
 	print header("text/html; charset=utf-8");
-	my $tmpl = HTML::Template->new('filename' => '../template/update-complete.tmpl');
+	my $tmpl = HTML::Template->new('filename' => util::template_fname('../template/update-complete.tmpl'));
 	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
@@ -79,7 +79,7 @@ sub main {
 	}
 
 	print header("text/html; charset=utf-8");
-	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
+	my $tmpl = HTML::Template->new('filename' => util::template_fname('../template/form.tmpl'));
 	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
@@ -102,7 +102,7 @@ sub main {
 	$cont =~ s/<created_date>(.*)<\/created_date>//g;
 
 	print header("text/html; charset=utf-8");
-	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
+	my $tmpl = HTML::Template->new('filename' => util::template_fname('../template/form.tmpl'));
 	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
@@ -116,7 +116,7 @@ sub main {
 	print $tmpl->output;
     } else {				# 新規登録フォーム生成
 	print header("text/html; charset=utf-8");
-	my $tmpl = HTML::Template->new('filename' => '../template/form.tmpl');
+	my $tmpl = HTML::Template->new('filename' => util::template_fname('../template/form.tmpl'));
 	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
