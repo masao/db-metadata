@@ -149,6 +149,7 @@ sub list_table(@) {
 sub list_pages(@) {
     my (@files) = @_;
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
+    $base_url .= ";scan=$scan" if defined $scan;
     my $retstr = "<p>ページ:\n";
 
     my $start = $page - $MAX_PAGE/2;
