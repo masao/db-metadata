@@ -5,9 +5,9 @@
 use strict;
 use Test;
 
-BEGIN { plan test => 6 }
+BEGIN { plan test => 12 }
 
-my @scripts = ("./genform.cgi");
+my @scripts = ("./genform.cgi", "./search.cgi");
 
 for my $cgi (@scripts) {
     # syntax ¡©
