@@ -7,6 +7,12 @@
   <xsl:template match="/">
     <table bgcolor="#ddddd0" border="2" cellpadding="2">
       <tr>
+        <td bgcolor="#aaddaa">データベースID</td>
+        <td>
+          <xsl:value-of select="//dbid"/>
+        </td>
+      </tr>
+      <tr>
         <td bgcolor="#aaddaa">データベース</td>
         <td>
           <xsl:value-of select="//dbname"/>
@@ -86,11 +92,11 @@
         <td bgcolor="#aaddaa">登録者</td>
         <td>
           <xsl:choose>
-            <xsl:when test="//url">
-              <a><xsl:attribute name="href"><xsl:value-of select="//url"/></xsl:attribute><xsl:value-of select="//企業名"/></a>
+            <xsl:when test="//user_url">
+              <a><xsl:attribute name="href"><xsl:value-of select="//user_url"/></xsl:attribute><xsl:value-of select="//username"/></a>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="//企業名"/>
+              <xsl:value-of select="//usernamed"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>

@@ -7,6 +7,7 @@
 
   <xsl:template match="/">
     <tr valign="top">
+      <td><xsl:value-of select="//dbid"/></td>
       <td><a href="browse.cgi?id={$id}"><xsl:value-of select="//dbname"/></a></td>
       <td><xsl:value-of select="//description"/></td>
       <td><xsl:value-of select="//field"/></td>
