@@ -287,7 +287,10 @@ sub group_list($) {
     foreach my $groupid (keys %group) {
 	foreach my $subid (@{$group{$groupid}->{'list'}}) {
 	    if ($subid eq $id) {
-		$retstr .= "<li><a href=\"?scan=group;search=$groupid\">$user";
+		$retstr .= "<li><a href=\"./personal.cgi?userid=";
+		$retstr .= $group{$groupid}->{'user'} . "\">";
+		$retstr .= $group{$groupid}->{'user'} . "</a>";
+		$retstr .= ":<a href=\"?scan=group;search=$groupid\">";
 		$retstr .= $group{$groupid}->{'name'} ."</a>";
 	    }
 	}
