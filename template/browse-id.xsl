@@ -15,7 +15,7 @@
       <tr>
         <td bgcolor="#aaddaa">データベース</td>
         <td>
-          <xsl:value-of select="//dbname"/>
+          <a href="browse.cgi?scan=dbname;search={//dbname}"><xsl:value-of select="//dbname"/></a>
           <xsl:if test="//dbname_yomi">
             （<xsl:value-of select="//dbname_yomi"/>）
           </xsl:if>
@@ -62,7 +62,8 @@
       <tr>
         <td bgcolor="#aaddaa">システム</td>
         <td>
-          <xsl:value-of select="//system"/>
+          <a href="browse.cgi?scan=system;search={//system}">
+          <xsl:value-of select="//system"/></a>
           <xsl:if test="//system_yomi">
             （<xsl:value-of select="//system_yomi"/>）
           </xsl:if>
@@ -79,7 +80,8 @@
       <tr>
         <td bgcolor="#aaddaa">プロデューサ</td>
         <td>
-          <xsl:value-of select="//producer"/>
+          <a href="browse.cgi?scan=producer;search={//producer}">
+            <xsl:value-of select="//producer"/></a>
           <xsl:if test="//producer_yomi">
             （<xsl:value-of select="//producer_yomi"/>）
           </xsl:if>
@@ -88,7 +90,8 @@
       <tr>
         <td bgcolor="#aaddaa">ディストリビュータ</td>
         <td>
-          <xsl:value-of select="//distributor"/>
+          <a href="browse.cgi?scan=distributor;search={//distributor}">
+            <xsl:value-of select="//distributor"/></a>
           <xsl:if test="//distributor_yomi">
             （<xsl:value-of select="//distributor_yomi"/>）
           </xsl:if>
@@ -97,14 +100,10 @@
       <tr>
         <td bgcolor="#aaddaa">登録者</td>
         <td>
-          <xsl:choose>
-            <xsl:when test="//user_url">
-              <a><xsl:attribute name="href"><xsl:value-of select="//user_url"/></xsl:attribute><xsl:value-of select="//username"/></a>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="//usernamed"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <a href="browse.cgi?scan=username;search={//username}"><xsl:value-of select="//username"/></a>
+          <xsl:if test="//user_url">
+            (<a><xsl:attribute name="href"><xsl:value-of select="//user_url"/></xsl:attribute><xsl:value-of select="//user_url"/></a>)
+          </xsl:if>
         </td>
       </tr>
     </table>
