@@ -209,7 +209,7 @@ sub scan_list(@) {
 	    die "tie fail: $scan.db: $!";
 	for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
 	    my $key = $list[$i];
-	    $result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">$key</a>";
+	    $result .= "<li><a href=\"$SCRIPT_NAME?search=".CGI::escape($key).";scan=$scan\">$key</a>";
 	    $result .= " (". count_num($hash{$key}) .")\n";
 	}
     }
