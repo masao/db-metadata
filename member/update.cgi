@@ -34,6 +34,7 @@ sub main {
 			 'HOME_URL' => $conf::HOME_URL,
 			 'FROM' => $conf::FROM,
 			 'SCRIPT_NAME' => script_name(),
+			 'USER' => remote_user(),
 			 'ERROR' => $error,
 			 'FORM_CONTROL' => param2form(@conf::PARAMETERS),
 			 'REQ_MARK' => $conf::REQ_MARK,
@@ -51,7 +52,7 @@ EOF
 
 	# データを登録する
 	my $id = get_id();
-	my $xmlfile = "$conf::DATADIR/$id.xml";
+	my $xmlfile = sprintf("$conf::DATADIR/%04d.xml", $id);
 	my $fh = util::fopen(">$xmlfile");
 	print $fh $xml;
 	$fh->close;
@@ -198,7 +199,7 @@ sub param2report (@) {
 
 sub get_id() {
     my $i = 0;
-    while (-f "$conf::DATADIR/$i.xml") {
+    while (-f sprintf("$conf::DATADIR/%04.xml", $i)) {
 	$i++;
     }
     return $i;
