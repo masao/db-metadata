@@ -34,7 +34,7 @@ sub main {
 			      'user' => $user,
 			      'list' => [] };
 	    util::write_groupinfo("../group.txt", %group);
-	    print $q->redirect("./browse.cgi");
+	    print $q->redirect("./personal.cgi");
 	} elsif ($cmd eq "addgroup") {
 	    if (defined($dbid) && length($dbid) &&
 		defined($groupid) && length($groupid)) {
