@@ -53,24 +53,41 @@ sub main {
 		     'ID' => $id);
 	print $tmpl->output;
     } elsif (defined $scan) {
-	my $tmpl = HTML::Template->new('filename' => 'template/browse-scan.tmpl');
-	
-	$tmpl->param('TITLE' => "データベース情報の閲覧",
-		     'HOME_TITLE' => $conf::HOME_TITLE,
-		     'HOME_URL' => $conf::HOME_URL,
-		     'FROM' => $conf::FROM,
-		     'scan_list' => scan_list($scan));
-	print $tmpl->output;
+	if (length($search)) {
+	    my $tmpl = HTML::Template->new('filename' => 'template/browse-scan-search.tmpl');
+	    my @files = get_scanned_files($scan, $search);
+	    $tmpl->param('TITLE' => "データベース情報の閲覧",
+			 'HOME_TITLE' => $conf::HOME_TITLE,
+			 'HOME_URL' => $conf::HOME_URL,
+			 'FROM' => $conf::FROM,
+			 'SCRIPT_NAME' => $SCRIPT_NAME,
+			 'scan' => $scan,
+			 'scanstr' => $conf::PARAM_LABELS{$scan},
+			 'search' => $search,
+			 'search_result' => scalar @files,
+			 'list_table' => list_table(@files),
+			 'list_page' => list_pages(@files)
+			);
+	    print $tmpl->output;
+	} else {
+	    my $tmpl = HTML::Template->new('filename' => 'template/browse-scan.tmpl');
+	    $tmpl->param('TITLE' => "$conf::PARAM_LABELS{$scan} 一覧",
+			 'HOME_TITLE' => $conf::HOME_TITLE,
+			 'HOME_URL' => $conf::HOME_URL,
+			 'FROM' => $conf::FROM,
+			 'scan_list' => scan_list($scan));
+	    print $tmpl->output;
+	}
     } else {
 	my $tmpl = HTML::Template->new('filename' => 'template/browse.tmpl');
-	my @files = util::pickup_files();
+	my @files = reverse util::pickup_files();
 	@files = do_search(@files);
 
 	$tmpl->param('TITLE' => "データベース情報の閲覧",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
-		     'SCRIPT_NAME' => script_name(),
+		     'SCRIPT_NAME' => $SCRIPT_NAME,
 		     'search' => $search,
 		     'search_result' => scalar @files,
 		     'list_table' => list_table(@files),
@@ -102,10 +119,19 @@ sub scan_list($) {
 	die "tie fail: $dbname.db: $!";
     foreach my $key (sort keys %hash) {
 	my @id = split(/,/, $hash{$key});
-	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;searchfield=$dbname\">$key</a>";
+	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$dbname\">$key</a>";
 	$result .= "(". scalar(@id) .")\n";
     }
     return $result;
+}
+
+# scan+search条件に合致するファイル名を返す。
+sub get_scanned_files($$) {
+    my ($dbname, $str) = @_;
+    my %hash = ();
+    tie(%hash, 'DB_File', "$dbname.db", O_RDONLY) ||
+	die "tie fail: $dbname.db: $!";
+    return map { "$_.xml" } split(/,/, $hash{$str});
 }
 
 sub list_table(@) {
@@ -127,6 +153,7 @@ sub list_pages(@) {
 
     my $start = $page - $MAX_PAGE/2;
     $start = 0 if $start < 0;
+    $retstr .= "... " if ($start != 0);
 
     for (my $i = $start; $i < $page+$MAX_PAGE/2 && $i*$MAX < @files; $i++) {
 	if ($i == $page) {
@@ -135,6 +162,7 @@ sub list_pages(@) {
 	    $retstr .= "<a href=\"$base_url;page=$i\">[". ( $i+1 ) ."]</a>\n";
 	}
     }
+    $retstr .= " ..." if ($page+$MAX_PAGE/2) * $MAX < @files;
     $retstr .= "</p>\n";
     return $retstr;
 }
@@ -169,4 +197,5 @@ sub fncmp() {
 util::muda($conf::HOME_TITLE,
 	   $conf::HOME_URL,
 	   $conf::FROM,
+	   $conf::PARAM_LABELS,
 	  );

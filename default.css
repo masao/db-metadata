@@ -1,5 +1,14 @@
 h1 { text-align: center; }
 
+div.scan-list {
+  background-color: silver;
+  padding: 2px;
+  border: thin solid gray;
+}
+div.scan-list strong {
+  font-size: larger;
+}
+
 p.error {
   background-color: pink;
   padding: 2px;

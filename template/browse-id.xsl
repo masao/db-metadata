@@ -112,7 +112,7 @@
   <xsl:template match="//keyword">
       <tr>
         <td bgcolor="#aaddaa">キーワード</td>
-        <td><xsl:value-of select="."/></td>
+        <td><a href="browse.cgi?scan=keyword;search={.}"><xsl:value-of select="."/></a></td>
       </tr>
     
   </xsl:template>

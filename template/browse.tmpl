@@ -1,16 +1,25 @@
 <!-- -*- html-helper -*- -->
 <TMPL_INCLUDE NAME=header.tmpl>
-<hr>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+<tr valign="top">
+<td nowrap>
+  <ul>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=dbname">データベース名一覧</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=system">システム名一覧</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=keyword">キーワード一覧</a>
+    <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=field">分野一覧</a>
+</td>
+<td align="right">
 <form method="GET" action="<TMPL_VAR NAME="SCRIPT_NAME">">
-<p>正規表現:
-<input type="text" name="search" value="<TMPL_VAR NAME="search">">
+<input type="text" name="search" value="<TMPL_VAR NAME="search">" size="30">
 <input type="hidden" name="sort" value="<TMPL_VAR NAME="sort">">
-<input type="submit" value="絞り込み検索">
-</p>
+<input type="submit" value=" 検索 ">
 </form>
+</td>
+</table>
 <hr>
 <TMPL_IF NAME=SEARCH>
-<p>Perl で /<TMPL_VAR NAME=search>/oi しています。grep -i とほぼ同じです。</p>
+<!-- p>Perl で /<TMPL_VAR NAME=search>/oi しています。grep -i とほぼ同じです。</p -->
 <p><font color="red">検索結果: <TMPL_VAR NAME=search_result> 件</font></p>
 </TMPL_IF>
 <table width="100%" border="1" bgcolor="#ddddd0">
@@ -25,4 +34,5 @@
 
 <TMPL_VAR NAME="list_page">
 
+</td></table>
 <TMPL_INCLUDE NAME=footer.tmpl>
