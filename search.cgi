@@ -25,6 +25,9 @@ my $BGCOLOR_HEAD = '#00A020';
 # URI らしき文字列に自動的にリンクを張る？
 my $USE_AUTOLINK = 1;
 
+# 表示する形式: table or list
+my $DISPLAY_MODE = 'list';
+
 # CGIパラメータ
 my $q = new CGI;
 my $SCRIPT_NAME = $q->script_name();
@@ -48,6 +51,7 @@ sub main {
 <input type="submit" value="絞り込み検索">
 </p>
 </form>
+<hr>
 EOF
 
     my $fh = util::fopen($conf::FILENAME);
@@ -70,32 +74,43 @@ EOF
     @entries = sort { fncmp($a->[$sortby], $b->[$sortby]) } @entries;
     @entries = reverse @entries if $sort =~ /r$/;
 
-    print <<EOF;
-<hr>
-<table width="100%" border="1" bgcolor="$BGCOLOR">
-<tr bgcolor="$BGCOLOR_HEAD">
-EOF
-    for (my $i = 0; $i < @conf::PARAMETERS; $i++) {
-	print <<EOF;
+    print "<table width=\"100%\" border=\"1\" bgcolor=\"$BGCOLOR\">\n";
+    if ($DISPLAY_MODE eq 'table') {
+	print "<tr bgcolor=\"$BGCOLOR_HEAD\">\n";
+	for (my $i = 0; $i < @conf::PARAMETERS; $i++) {
+	    print <<EOF;
 <th>
 <a href="$SCRIPT_NAME?sort=$i;search=$search">$conf::PARAM_LABELS{$conf::PARAMETERS[$i]}</a>
 <a href="$SCRIPT_NAME?sort=${i}r;search=$search">(*)</a>
 </th>
 EOF
+	}
+	print "</tr>\n";
     }
-    print "</tr>\n";
 
     for (my $i = $page * $MAX; $i < @entries && $i < ($page+1) * $MAX; $i++) {
-	print "<tr valign=\"top\">\n";
+	print "<tr valign=\"top\">\n" if $DISPLAY_MODE eq 'table';
+	my $col = 0;
 	for my $cont (@{$entries[$i]}) {
 	    $cont =~ s/^\s+//g;
 	    $cont =~ s/\s+$//g;
 	    if ($USE_AUTOLINK) {
 		$cont =~ s#((https?|ftp)://[;\/?:@&=+\$,A-Za-z0-9\-_.!~*'()]+)#<a href="$1">$1</a>#gi;
 	    }
-	    print "<td>$cont</td>\n";
+	    if ($DISPLAY_MODE eq 'table') {
+		print "<td>$cont</td>\n";
+	    } elsif ($DISPLAY_MODE eq 'list') {
+		next if !length($cont);
+		print <<EOF;
+<tr>
+<th bgcolor="$BGCOLOR_HEAD">$conf::PARAM_LABELS{$conf::PARAMETERS[$col]}</th>
+<td>$cont</td>
+</tr>
+EOF
+	    }
+	    $col++;
 	}
-	print "</tr>\n";
+	print "</tr>\n" if $DISPLAY_MODE eq 'table';
     }
     print "</table>\n";
     print_pages();
