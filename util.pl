@@ -50,7 +50,7 @@ sub get_groupinfo($) {
 			 'name' => $3,
 			 'list' => [ split(',', $4) ]
 			};
-	    print $line;
+	    # print $line;
 	}
     }
     return %info;

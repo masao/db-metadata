@@ -35,7 +35,7 @@ sub main {
     } else {
 	print $q->header("text/html; charset=utf-8");
 	my $tmpl = HTML::Template->new('filename' => '../template/addgroup.tmpl');
-	$tmpl->param('TITLE' => $conf::TITLE,
+	$tmpl->param('TITLE' => "新規グループの追加",
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,

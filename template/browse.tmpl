@@ -12,11 +12,16 @@
     <li><a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=group">グループ一覧</a>
 </td>
 <td align="right">
+<div class="search-form">
 <form method="GET" action="<TMPL_VAR NAME="SCRIPT_NAME">">
 <input type="text" name="search" value="<TMPL_VAR NAME="search">" size="40">
 <input type="hidden" name="sort" value="<TMPL_VAR NAME="sort">">
 <input type="submit" value=" 検索 ">
 </form>
+</div>
+<TMPL_IF NAME=USER>
+<div><a href="./personal.cgi"><TMPL_VAR NAME=USER>さんのページへ</a></div>
+</TMPL_IF>
 </td>
 </table>
 <hr>
