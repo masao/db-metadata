@@ -73,7 +73,12 @@
         </td>
       </tr>
     </table>
-  </xsl:template>
+    <xsl:if test="boolean(string-length(//source_id))">
+      <p>
+        この情報は<a href="browse.cgi?id={//source_id}"><xsl:value-of select="//source_id"/></a>を元に作成しています。
+    </p>
+  </xsl:if>  
+    </xsl:template>
   <xsl:template match="//contributor">
       <tr>
         <td bgcolor="#aaddaa">コントリビュータ</td>
