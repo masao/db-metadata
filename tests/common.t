@@ -15,6 +15,6 @@ for my $cgi (@scripts) {
 
     # 適当な引数で実行して、エラーメッセージを表示しないか？
     for my $arg (0, 1, "foo", "bababa", "x"x500) {
-	ok("", `perl -wT $cgi $arg 2>&1 > /dev/null`, "$cgi: $arg");
+	ok(`perl -wT $cgi $arg 2>&1 > /dev/null`, '', "$cgi: $arg");
     }
 }

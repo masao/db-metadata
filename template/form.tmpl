@@ -1,0 +1,16 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl>
+
+<p>データベースに関する情報を登録・更新します。</p>
+<TMPL_VAR NAME=ERROR>
+<form method="POST" action="<TMPL_VAR NAME=SCRIPT_NAME>">
+<table cellpadding="2" border="2">
+<TMPL_VAR NAME=FORM_CONTROL>
+</table>
+<p>
+<input type="submit" value=" 登 録 ">
+</p>
+<p><TMPL_VAR NAME=REQ_MARK> は必須入力項目を示します。</p>
+</form>
+
+<TMPL_INCLUDE NAME=footer.tmpl>

@@ -1,0 +1,20 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME="header.tmpl">
+
+<p>
+データベース情報の登録ありがとうございました。
+</p>
+<p>
+登録内容は以下の通りです。<br>
+お問合せは <a href="mailto:<TMPL_VAR NAME="FROM">"><TMPL_VAR NAME="FROM"></a> までお願いいたします。
+</p>
+<p>
+[登録内容]
+</p>
+<table border="2">
+
+<TMPL_VAR NAME="REPORT">
+
+</table>
+
+<TMPL_INCLUDE NAME="footer.tmpl">

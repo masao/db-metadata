@@ -7,6 +7,7 @@
 use strict;
 use CGI qw/:standard/;
 use CGI::Carp 'fatalsToBrowser';
+use HTML::Template;
 
 $| = 1;
 
@@ -27,19 +28,26 @@ sub main {
 	}
 	if (length($error)) {
 	    print header();
-	    print $conf::HTML_HEADER;
-	    print $error;
-	    print html_form();
-	    print $conf::HTML_FOOTER;
+	    my $tmpl = HTML::Template->new('filename' => 'template/form.tmpl');
+	    $tmpl->param('TITLE' => $conf::TITLE,
+			 'HOME_TITLE' => $conf::HOME_TITLE,
+			 'HOME_URL' => $conf::HOME_URL,
+			 'FROM' => $conf::FROM,
+			 'SCRIPT_NAME' => script_name(),
+			 'ERROR' => $error,
+			 'FORM_CONTROL' => param2form(@conf::PARAMETERS),
+			 'REQ_MARK' => $conf::REQ_MARK,
+			);
+	    print $tmpl->output;
 	    exit;
 	}
 
 	my $xml = <<EOF;
 <?xml version="1.0" encoding="EUC-JP"?>
-<データベース>
+<$conf::ROOT_ELEMENT>
 EOF
 	$xml .= param2xml(@conf::PARAMETERS);
-	$xml .= "</データベース>\n";
+	$xml .= "</$conf::ROOT_ELEMENT>\n";
 
 	# データを登録する
 	my $id = get_id();
@@ -48,11 +56,16 @@ EOF
 	print $fh $xml;
 	$fh->close;
 
-	my $report = '';
+	my $report = param2report(@conf::PARAMETERS);
+	my $tmpl = HTML::Template->new('filename' => 'template/report.tmpl');
+	$tmpl->param('TITLE' => $conf::TITLE,
+		     'HOME_TITLE' => $conf::HOME_TITLE,
+		     'HOME_URL' => $conf::HOME_URL,
+		     'FROM' => $conf::FROM,
+		     'REPORT' => $report,
+		    );
 	print header();
-	print $conf::HTML_HEADER;
-	print "<p>データを登録しました。</p>";
-	print $conf::HTML_FOOTER;
+	print $tmpl->output;
 
 	if ($conf::USE_MAIL) {
 	    my $msg = util::html2txt($report);
@@ -61,28 +74,18 @@ EOF
 	}
     } else {
 	print header();
-	print $conf::HTML_HEADER;
-	print html_form();
-	print $conf::HTML_FOOTER;
+	my $tmpl = HTML::Template->new('filename' => 'template/form.tmpl');
+	$tmpl->param('TITLE' => $conf::TITLE,
+		     'HOME_TITLE' => $conf::HOME_TITLE,
+		     'HOME_URL' => $conf::HOME_URL,
+		     'FROM' => $conf::FROM,
+		     'SCRIPT_NAME' => script_name(),
+		     # 'ERROR' => $error,
+		     'FORM_CONTROL' => param2form(@conf::PARAMETERS),
+		     'REQ_MARK' => $conf::REQ_MARK,
+		    );
+	print $tmpl->output;
     }
-}
-
-sub html_form() {
-    my $script_name = script_name();
-    my $retstr = <<EOF;
-$conf::NOTE
-<form method="POST" action="$script_name">
-<table cellpadding="2" border="2">
-EOF
-    $retstr .= param2form(@conf::PARAMETERS);
-    $retstr .= <<EOF;
-</table>
-<p>
-<input type="submit" value=" 登 録 ">
-</p>
-<p>$conf::REQ_MARK は必須入力項目を示します。</p>
-</form>
-EOF
 }
 
 # フォーム部品を設定に従って配置する
@@ -164,6 +167,35 @@ sub param2xml (@) {
     return $xml;
 }
 
+# 登録した内容を確認するために表示する
+sub param2report (@) {
+    my (@parameters) = @_;
+    my $report = '';
+    for my $entry (@parameters) {
+	$report .= "<tr><td>$conf::PARAM_LABELS{$entry}</td><td>";
+	my ($type, @args) =split(/:/, $conf::PARAM_TYPES{$entry});
+	if ($type eq "textfield") {
+	    $report .= CGI::escapeHTML(param($entry));
+	} elsif ($type eq "radio") {
+	    my $str = $entry . param($entry);
+	    $report .= $conf::PARAM_LABELS{$str};
+	} elsif ($type eq "textarea") {
+	    $report .= "<pre>";
+	    $report .= CGI::escapeHTML(param($entry));
+	    $report .= "</pre>";
+	} elsif ($type eq "external") {
+	    param($entry, eval "$args[0]");
+	    $report .= CGI::escapeHTML(param($entry));
+	} elsif ($type eq "nest") {
+	    $report .= "<table cellpadding=\"1\" border=\"1\" width=\"100%\">";
+	    $report .= param2report(@args);
+	    $report .= "</table>\n";
+	}
+	$report .= "</td></tr>\n";
+    }
+    return $report;
+}
+
 sub get_id() {
     my $i = 0;
     while (-f "$conf::DATADIR/$i.xml") {
@@ -174,8 +206,6 @@ sub get_id() {
 
 # For avoiding "used only once: possible typo at ..." warnings.
 util::muda(
-$conf::FROM,
 $conf::SUBJECT,
-$conf::NOTE,
 $conf::USE_MAIL,
 );

@@ -1,6 +1,4 @@
-#!/usr/local/bin/perl -w
 # $Id$
-
 package conf;
 
 ### 全般の設定
@@ -12,17 +10,10 @@ $FROM = 'yuka@ulis.ac.jp';
 $TITLE = 'データベース情報の登録/更新';
 
 # ホームページの URL
-$HOME_URL = 'http://nile.ulis.ac.jp/~masao/dbxml/';
+$HOME_URL = 'http://nile.ulis.ac.jp/~masao/test/dbxml/';
 
 # ホームページのタイトル
 $HOME_TITLE = 'データベース情報共有プロジェクト';
-
-# フォームの先頭に書く注意事項（HTML）
-$NOTE = <<EOF;
-<p>
-データベースに関する情報を登録・更新します。
-</p>
-EOF
 
 # 必須項目を示すマーク（HTML）
 $REQ_MARK = '<small><font color="red">※</font></small>';
@@ -35,6 +26,9 @@ $USE_MAIL = 0;
 
   # メール通知する場合の Subject: （非ASCIIは使えない）
   $SUBJECT = '[DB Metadata]';
+
+# データを登録する XML のルート要素名
+$ROOT_ELEMENT = 'データベース';
 
 ### HTML の <form> 部品の定義
 
@@ -76,51 +70,6 @@ $USE_MAIL = 0;
 
 # repeatable な入力項目
 %PARAM_REPEATABLES = ('keyword' => 1);
-
-### HTMLの表現
-
-# 処理終了時のメッセージ（HTML）の先頭部分
-$REPORT_HEADER = <<EOF;
-<p>
-データベース情報の登録ありがとうございました。
-</p>
-<p>
-登録内容は以下の通りです。<br>
-お問合せは <a href="mailto:$FROM">$FROM</a> までお願いいたします。
-</p>
-<p>
-[登録内容]
-</p>
-<table border="2">
-EOF
-
-# 処理終了時のメッセージの最後の部分
-$REPORT_FOOTER = <<EOF;
-</table>
-EOF
-
-# HTMLの先頭部分
-$HTML_HEADER = <<EOF;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
-<title>$TITLE</title>
-</head>
-<body>
-<h1>$TITLE</h1>
-EOF
-
-# HTMLの最後の部分
-$HTML_FOOTER = <<EOF;
-<hr>
-<address>
-<a href="$HOME_URL">$HOME_TITLE</a> / <a href="mailto:$FROM">$FROM</a>
-</address>
-</body>
-</html>
-EOF
 
 ### 設定おわり
 1;

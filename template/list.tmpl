@@ -1,0 +1,18 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl>
+<hr>
+<form method="GET" action="<TMPL_VAR NAME="SCRIPT_NAME">">
+<p>正規表現:
+<input type="text" name="search" value="<TMPL_VAR NAME="search">">
+<input type="hidden" name="sort" value="<TMPL_VAR NAME="sort">">
+<input type="submit" value="絞り込み検索">
+</p>
+</form>
+<hr>
+<TMPL_VAR NAME="search_result">
+
+<TMPL_VAR NAME="list_table">
+
+<TMPL_VAR NAME="list_page">
+
+<TMPL_INCLUDE NAME=footer.tmpl>

@@ -3,9 +3,9 @@
 # $Id$
 
 use strict;
-use CGI;
+use CGI qw/:standard/;
 use CGI::Carp 'fatalsToBrowser';
-use DirHandle;
+use HTML::Template;
 
 use lib ".";
 require 'util.pl';
@@ -41,24 +41,14 @@ my @files = ();
 main();
 sub main {
     print $q->header("text/html; charset=EUC-JP");
-    print $conf::HTML_HEADER;
-    print <<EOF;
-<hr>
-<form method="GET" action="$SCRIPT_NAME">
-<p>正規表現:
-<input type="text" name="search" value="$search">
-<input type="hidden" name="sort" value="$sort">
-<input type="submit" value="絞り込み検索">
-</p>
-</form>
-<hr>
-EOF
+    my $tmpl = HTML::Template->new('filename' => 'template/list.tmpl');
 
     opendir(DIR, $conf::DATADIR) || die "opendir: $conf::DATADIR: $!";
     @files = grep { /^\d+\.xml$/o } readdir(DIR);
     @files = sort { $a <=> $b } @files;
     closedir(DIR) || die "closedir: $!";
 
+    my $search_result = '';
     if (length($search)) {	# 検索
 	my @result = ();
 	for my $file (@files) {
@@ -66,28 +56,30 @@ EOF
 	    push @result, $file if $cont =~ /$search/oi;
 	}
 	@files = @result;
-	print "<p>Perl で /$search/oi しています。grep -i とほぼ同じです。</p>";
- 	print "<p><font color=\"red\">検索結果: ", $#files + 1, "件</font></p>\n";
+	$search_result .= <<EOF;
+<p>Perl で /$search/oi しています。grep -i とほぼ同じです。</p>
+<p><font color="red">検索結果: $#files 件</font></p>
+EOF
     }
 
-    print <<EOF;
+    my $list_table = <<EOF;
 <table width="100%" border="1" bgcolor="$BGCOLOR">
 <tr bgcolor="$BGCOLOR_HEAD">
 <th> - </th>
 EOF
     for (my $i = 0; $i < @DISPLAY_ELEMENTS; $i++) {
-	print <<EOF;
+	$list_table .= <<EOF;
 <th>
 <a href="$SCRIPT_NAME?sort=$i;search=$search">$conf::PARAM_LABELS{$DISPLAY_ELEMENTS[$i]}</a>
 <a href="$SCRIPT_NAME?sort=${i}r;search=$search">(*)</a>
 </th>
 EOF
     }
-    print "</tr>\n";
+    $list_table .= "</tr>\n";
 
     for (my $i = $page * $MAX; $i < @files && $i < ($page+1) * $MAX; $i++) {
-	print "<tr valign=\"top\">\n";
-	print "<td><a href=\"$files[$i]\">", $i + 1, "</a></td>\n";
+	$list_table .= "<tr valign=\"top\">\n";
+	$list_table .= "<td><a href=\"$files[$i]\">". ($i + 1) ."</a></td>\n";
 	my $cont = util::readfile("$conf::DATADIR/$files[$i]");
 	for my $elem (@DISPLAY_ELEMENTS) {
 	    my @tmp = ();
@@ -99,15 +91,23 @@ EOF
 	    if ($USE_AUTOLINK) {
 		$cont =~ s#((https?|ftp)://[;\/?:@&=+\$,A-Za-z0-9\-_.!~*'()]+)#<a href="$1">$1</a>#gi;
 	    }
-	    print "<td>$cont</td>\n";
+	    $list_table .= "<td>$cont</td>\n";
 	}
-	print "</tr>\n";
+	$list_table .= "</tr>\n";
     }
-    print "</table>\n";
-    print_pages();
-    print $conf::HTML_FOOTER;
-}
+    $list_table .= "</table>\n";
 
+    $tmpl->param('TITLE' => $conf::TITLE,
+		 'HOME_TITLE' => $conf::HOME_TITLE,
+		 'HOME_URL' => $conf::HOME_URL,
+		 'FROM' => $conf::FROM,
+		 'SCRIPT_NAME' => script_name(),
+		 'search_result' => $search_result,
+		 'list_table' => $list_table,
+		 'list_page' => list_pages()
+		);
+    print $tmpl->output;
+}
 
 # 数字を考慮したソート
 sub fncmp() {
@@ -117,21 +117,24 @@ sub fncmp() {
     return $x cmp $y;
 }
 
-sub print_pages() {
+sub list_pages() {
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
-    print "<p>ページ:\n";
+    my $retstr = "<p>ページ:\n";
     for (my $i = 0; $i*$MAX < @files; $i++) {
 	if ($i == $page) {
-	    print "[", $i+1, "]\n";
+	    $retstr .= "[". ( $i+1 ) ."]\n";
 	} else {
-	    print "<a href=\"$base_url;page=$i\">[", $i+1, "]</a>\n";
+	    $retstr .= "<a href=\"$base_url;page=$i\">[". ( $i+1 ) ."]</a>\n";
 	}
     }
-    print "</p>\n";
+    $retstr .= "</p>\n";
+    return $retstr;
 }
 
 # For avoiding "used only once: possible typo at ..." warnings.
-util::muda($conf::HTML_HEADER,
-	   $conf::HTML_FOOTER,
+util::muda($conf::TITLE,
+	   $conf::HOME_TITLE,
+	   $conf::HOME_URL,
+	   $conf::FROM,
 	   $conf::PARAM_LABELS,
 	  );
