@@ -242,7 +242,9 @@ sub list_pages(@) {
 
     my $start = $page - $MAX_PAGE/2;
     $start = 0 if $start < 0;
-    $retstr .= "... " if ($start != 0);
+    if ($start != 0) {
+	$retstr .= "<a href=\"$base_url;page=0\">[1]</a> ...";
+    }
 
     for (my $i = $start; $i < $page+$MAX_PAGE/2 && $i*$MAX < @files; $i++) {
 	if ($i == $page) {
@@ -251,7 +253,10 @@ sub list_pages(@) {
 	    $retstr .= "<a href=\"$base_url;page=$i\">[". ( $i+1 ) ."]</a>\n";
 	}
     }
-    $retstr .= " ..." if ($page+$MAX_PAGE/2) * $MAX < @files;
+    if (($page+$MAX_PAGE/2) * $MAX < @files) {
+	my $max = int($#files/$MAX);
+	$retstr .= " ... <a href=\"$base_url;page=$max\">[". ($max+1) ."]</a>";
+    }
     $retstr .= "</p>\n";
     return $retstr;
 }
