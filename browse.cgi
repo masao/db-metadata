@@ -74,7 +74,7 @@ sub main {
 			 'USER' => $user,
 			 'scan' => $scan,
 			 'scanstr' => $conf::PARAM_LABELS{$scan},
-			 'search' => $search,
+			 'search' => searchstr($search),
 			 'search_result' => scalar @files,
 			 'list_table' => list_table(@files),
 			 'list_page' => list_pages(@files)
@@ -190,6 +190,16 @@ sub get_scanned_files($$) {
 	return map { "$_.xml" } split(/,/, $hash{$str});
     }
     return ();
+}
+
+sub searchstr($) {
+    my ($str) = @_;
+    if ($scan eq "group") {
+	my %group = util::get_groupinfo("$BASEDIR/group.txt");
+	return $group{$str}->{'name'};
+    } else {
+	return $str;
+    }
 }
 
 sub list_table(@) {
