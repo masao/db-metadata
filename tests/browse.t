@@ -1,18 +1,19 @@
 #!/usr/bin/perl -w
 # $Id$
-# ¶¦ÄÌ¤¹¤ë¥Æ¥¹¥È¤ò¹Ô¤¦¡£
+# å…±é€šã™ã‚‹ãƒ†ã‚¹ãƒˆã‚’è¡Œã†ã€‚
 
 use strict;
 use Test;
 
-BEGIN { plan test => 7 }
+BEGIN { plan test => 8 }
 
 my $cgi = "./browse.cgi";
 my @test_args =
-    ("id=0001", "id=unknown", "search=¿·Ê¹", "scan=keyword",
-     "id=8139", # °ìÈÖ¥Ç¡¼¥¿¤¬Â¿¤¤
-     "id=9354", # ºÇ¸å¤Îid
+    ("id=0001", "id=unknown", "search=æ–°è", "scan=keyword",
+     "id=8139", # ä¸€ç•ªãƒ‡ãƒ¼ã‚¿ãŒå¤šã„
+     "id=9354", # æœ€å¾Œã®id
      "scan=keyword search=PC",
+     "scan=keyword search=ã‚¨ãƒãƒ«ã‚®ãƒ¼ page=1",
      );
 
 foreach my $arg (@test_args) {
