@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<link rev="made" href="mailto:masao@ulis.ac.jp">
+<title>セキュリティ上の注意点</title>
+</head>
+<body>
+<!-- hhmts start -->
+<div class="last-update">最終更新日: <strong>Tue Jun 11 21:41:04 2002</strong></div>
+<!-- hhmts end -->
+<hr>
+<h1>セキュリティ上の注意点</h1>
+<p>
+本データ登録用CGIプログラムの運用に関するセキュリティ上の注意点を挙げておきます。
+</p>
+<ul>
+  <li>ローカルユーザによる脅威
+      <p>
+      前提として、ローカルマシンにログイン可能なユーザなら誰でも、
+      誰でもCSV（データ）ファイルを変更・削除・閲覧ができてしまいます。
+      </p>
+
+  <li>リモートからの脅威
+      <ol>
+	<li>メール機能: SPAM的に用いる
+	    <p>
+	    メール通知機能を使う（<code>$USE_MAIL = 1;</code>）場合、
+	    ユーザが指定したメールアドレスに任意の文章を送ることができますので、SPAMの踏台になりえます。注意してください。
+	    </p>
+	    <p>
+	    <strong>対策: </strong>
+	    メール通知機能を切ってください。
+	    （設定ファイルで、<code>$USE_MAIL = 0;</code>にする）
+	    </p>
+
+	<li>メール機能: メール爆弾
+	    <p>
+	    メール通知機能を使う（<code>$USE_MAIL = 1;</code>）場合、
+	    ユーザが指定したメールアドレスに大量のメールを送ることができます。
+	    また、存在しないメールアドレスを入力した場合、大量のエラーメールを発生させてしまう可能性があります。
+	    これらの手法で、メール爆弾を送ることが可能になってしまいます。
+	    </p>
+	    <p>
+	    <strong>対策: </strong>
+	    メール通知機能を切ってください。
+	    （設定ファイルで、<code>$USE_MAIL = 0;</code>にする）
+	    </p>
+
+	<li>個人情報の流出
+	    <a href="http://www.zdnet.co.jp/news/0205/27/njbt_06.html">[個人情報流出の実例]</a>
+
+	    <p>
+	    データファイルがWebサーバから参照可能な位置にある場合、
+	    リモートから登録された情報を直接参照できてしまいます。
+	    </p>
+	    <p>
+	    <strong>対策:</strong>
+	    データファイルの置き場所をWebサーバ上から参照できない場所に指定してください。（<code>$FILENAME = "/home/hoge/secret/annai.csv";</code>のように絶対パスで指定できます）
+	    </p>
+	    <p>
+	    </p>
+
+	<li>登録データの改竄
+	    <p>
+	    データ登録処理は追加しか行っていないので、できないと思います。
+	    </p>
+
+	<li>Cross Site Scripting脆弱性
+	    <a href="http://www.ipa.go.jp/security/ciadr/20011023css.html">[この脆弱性についての参考サイト]</a>
+	    <p>
+	    一応、ユーザの入力は全て<code>CGI::escapeHTML()</code>を通しているので、無いと思います。
+	    </p>
+
+	<li>DoS（Denial of Service）攻撃
+	    <p>
+	    一秒間に数千回アクセスしてくるようなアタックには無防備です。
+	    </p>
+      </ol>
+</ul>
+
+<hr>
+<address>
+高久雅生 (Takaku Masao)<br>
+<a href="http://nile.ulis.ac.jp/~masao/">http://nile.ulis.ac.jp/~masao/</a>, 
+<a href="mailto:masao@ulis.ac.jp">masao@ulis.ac.jp</a>
+</address>
+<div class="id">$Id$</div>
+</body>
+</html>
