@@ -19,6 +19,7 @@ my $search = CGI::escapeHTML($q->param('search')) || "";
 my $sort = CGI::escapeHTML($q->param('sort')) || 0;
 my $id = CGI::escapeHTML($q->param('id'));
 my $scan = CGI::escapeHTML($q->param('scan'));
+my $field = CGI::escapeHTML($q->param('field')) || "";
 my $user = $q->remote_user();
 
 my $BASEDIR = ".";
@@ -121,7 +122,17 @@ sub do_search(@) {
     if (length($search)) {	# 検索
 	foreach my $file (@files) {
 	    my $cont = util::readfile("$conf::DATADIR/$file");
-	    push @result, $file if $cont =~ /$search/oi;
+	    if (length($field)) {		       	# フィールド検索
+		my @vals = util::get_tagvalues($cont, $field);
+		foreach my $val (@vals) {
+		    if ($val =~ /$search/oi) {
+			push @result, $file;
+			last;
+		    }
+		}
+	    } else {					# 全文検索
+		push @result, $file if $cont =~ /$search/oi;
+	    }
 	}
     } else {
 	@result = @files;

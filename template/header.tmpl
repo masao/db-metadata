@@ -31,6 +31,15 @@
 <td align="right">
 <div class="search-form">
 <form method="GET" action="<TMPL_VAR NAME="SCRIPT_NAME">">
+<select name="field">
+  <option value="">全文</option>
+  <option value="dbname">データベース名</option>
+  <option value="system">システム名</option>
+  <option value="contributor">コントリビュータ名</option>
+  <option value="userid">登録者</option>
+  <option value="subject">主題</option>
+  <option value="group">グループ</option>
+</select>
 <input type="text" name="search" value="<TMPL_VAR NAME="search">" size="40">
 <input type="hidden" name="sort" value="<TMPL_VAR NAME="sort">">
 <input type="submit" value=" 検索 ">
