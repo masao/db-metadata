@@ -159,17 +159,27 @@ sub do_search(@) {
 
 # DBファイルから scan 対象のソート済リストを返す
 sub get_scan_list() {
-    my %hash = ();
+    my @list = ();
     if ($scan eq "group") {
 	my %group = util::get_groupinfo("$BASEDIR/group.txt");
+	my %hash = ();
 	foreach my $groupid (keys %group) {
 	    $hash{$groupid} = join(',', @{$group{$groupid}->{'list'}});
 	}
+	@list = sort { count_num($hash{$b}) <=> count_num($hash{$a}) || $a cmp $b } keys %hash;
+    } elsif ($scan eq "userid") {
+	my $fh = util::fopen("$BASEDIR/member/.htpasswd");
+	while (defined(my $line = <$fh>)) {
+	    if ($line =~ /^(\w+):/) {
+		push @list, $1;
+	    }
+	}
     } else {
+	my %hash = ();
 	tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
 	    die "tie fail: $scan.db: $!";
+	@list = sort { count_num($hash{$b}) <=> count_num($hash{$a}) || $a cmp $b } keys %hash;
     }
-    my @list = sort { count_num($hash{$b}) <=> count_num($hash{$a}) || $a cmp $b } keys %hash;
     return @list;
 }
 
