@@ -65,7 +65,6 @@ $ROOT_ELEMENT = 'データベース';
 	       description
 	       subject
 
-	       id
 	       userid
                access
 	       system
@@ -81,6 +80,7 @@ $ROOT_ELEMENT = 'データベース';
 	       region
 
 	       id
+               source_id
 	      );
 
 # フォーム部品のうち、必須入力項目のもの
@@ -96,6 +96,7 @@ $ROOT_ELEMENT = 'データベース';
 #
 %PARAM_TYPES = (
 		'id' =>  "hidden",
+		'source_id' =>  "hidden",
 		'userid' =>  "hidden",
 		'system' =>  'textfield:60',
 		'system_yomi' =>  'textfield:60',
