@@ -29,7 +29,7 @@ require 'util.pl';
 require 'conf.pl';	# 設定内容を読み込む
 
 # 1ページに表示する件数
-my $MAX = 10;
+my $MAX = 20;
 
 # 1ページに表示する件数
 my $MAX_PAGE = 20;
@@ -71,13 +71,16 @@ sub main {
 			);
 	    print $tmpl->output;
 	} else {
+	    my @list = get_scan_list();
 	    my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse-scan.tmpl");
 	    $tmpl->param('TITLE' => "$conf::PARAM_LABELS{$scan} 一覧",
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
 			 'FROM' => $conf::FROM,
 			 'USER' => $user,
-			 'scan_list' => scan_list($scan));
+			 'scan_list' => scan_list(@list),
+			 'list_page' => list_pages(@list)
+			);
 	    print $tmpl->output;
 	}
     } else {
@@ -114,15 +117,24 @@ sub do_search(@) {
     return @result;
 }
 
-sub scan_list($) {
-    my ($dbname) = @_;
+# DBファイルから scan 対象のソート済リストを返す
+sub get_scan_list() {
+    my %hash = ();
+    tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
+	die "tie fail: $scan.db: $!";
+    my @list = sort { count_num($hash{$b}) <=> count_num($hash{$a}) || $a cmp $b } keys %hash;
+    return @list;
+}
+
+sub scan_list(@) {
+    my (@list) = @_;
     my $result = "";
     my %hash = ();
-    tie(%hash, 'DB_File', "$BASEDIR/$dbname.db", O_RDONLY) ||
-	die "tie fail: $dbname.db: $!";
-    foreach my $key (sort { count_num($hash{$b}) <=> count_num($hash{$a})
-				|| $a cmp $b } keys %hash) {
-	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$dbname\">$key</a>";
+    tie(%hash, 'DB_File', "$BASEDIR/$scan.db", O_RDONLY) ||
+	die "tie fail: $scan.db: $!";
+    for (my $i = $page * $MAX; $i < @list && $i < ($page+1) * $MAX; $i++) {
+	my $key = $list[$i];
+	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$scan\">$key</a>";
 	$result .= " (". count_num($hash{$key}) .")\n";
     }
     return $result;
