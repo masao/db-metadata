@@ -27,7 +27,18 @@
       </tr>
       <tr>
         <td bgcolor="#aaddaa">分野</td>
-        <td><xsl:value-of select="//field"/></td>
+        <xsl:choose>
+          <xsl:when test="//subfield">
+            <td><xsl:value-of select="//field/@label"/>(<xsl:value-of select="//field/subfield"/>)</td>
+            
+          </xsl:when>
+          <xsl:otherwise>
+            <td><xsl:value-of select="//field/@label"/></td>
+
+          </xsl:otherwise>
+          
+        </xsl:choose>
+        
       </tr>
       <xsl:apply-templates select="//keyword" />
       <xsl:apply-templates select="//lang" />
