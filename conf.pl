@@ -55,6 +55,7 @@ $ROOT_ELEMENT = 'データベース';
 		 'producer_country' =>  "プロデューサ国名",
 		 'description' =>  "特徴",
 		 'field' =>  "分野",
+		 'subfield' =>  "分野",
 		 'keyword' =>  "キーワード",
 		 'type' =>  "対象とするデータ種別",
 		 'publication' =>  "冊子体名",
