@@ -35,33 +35,31 @@ $ROOT_ELEMENT = 'データベース';
 # フォーム部品のラベル（名前）
 %PARAM_LABELS = (
 		 'id' =>  "データベースID",
+		 'source_id' =>  "派生元ID",
+		 'created_date' =>  "作成日",
+		 'update_date' =>  "更新日",
 		 'userid' =>  "ユーザID",
-		 'system' =>  "システム名",
-		 'system_yomi' =>  "システム名・ヨミ",
-		 'contributor' =>  "コントリビュータ",
-		 'service_type' =>  "サービス種別",
-		 'format' =>  "配布種別",
-		 'terminal_type' =>  "端末種別",
-		 'condition' =>  "利用条件(料金、時間含む)",
 		 'dbname' =>  "データベース名",
-		 'dbname_yomi' =>  "データベース名・ヨミ",
+		 'system' =>  "システム名",
+		 'condition' =>  "利用条件(料金、時間含む)",
+		 'format' =>  "データ提供形態",
+		 'contributor' =>  "コントリビュータ",
 		 'description' =>  "特徴",
 		 'subject' =>  "主題（分野、キーワード）",
 		 'type' =>  "対象とするデータ種別",
-		 'publication' =>  "冊子体名",
-		 'survey' =>  "調査名",
 		 'lang' =>  "言語",
 		 'period' =>  "収録期間",
 		 'total' =>  "収録件数",
 		 'interval' =>  "更新周期",
 		 'interval_num' =>  "更新件数",
-		 'region' =>  "対象地域"
+		 'region' =>  "対象地域",
+		 'category' =>  "カテゴリ",
+		 'access' =>  "アクセス先"
 		);
 
 # フォーム部品の表示順序、CVSファイルへの登録順も兼ねる
 @PARAMETERS = qw(
 	       dbname
-	       dbname_yomi
 
 	       description
 	       subject
@@ -69,15 +67,10 @@ $ROOT_ELEMENT = 'データベース';
 	       id
 	       userid
 	       system
-	       system_yomi
 	       contributor
-	       service_type
 	       format
-	       terminal_type
 	       condition
 	       type
-	       publication
-	       survey
 	       lang
 	       period
 	       total
@@ -126,7 +119,7 @@ $ROOT_ELEMENT = 'データベース';
 
 # repeatable な入力項目
 %PARAM_REPEATABLES = (
-		      "service_type" => 1,
+		      "contributor" => 1,
 		      "format" => 1,
 		      "terminal_type" => 1,
 		      "subject" => 1,
