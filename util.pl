@@ -17,6 +17,16 @@ sub pickup_files() {
     return @files;
 }
 
+# データベース名を取出してくる
+sub get_dbname($) {
+    my ($id) = @_;
+
+    my $cont = util::readfile("$conf::DATADIR/$id.xml");
+    my @tmp = get_tagvalues($cont, "dbname");
+
+    return $tmp[0];
+}
+
 # コメント情報を取り出してくる
 sub bbs_list($) {
     my ($id, $basedir) = @_;

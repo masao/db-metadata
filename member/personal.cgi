@@ -30,7 +30,7 @@ sub main {
 		 'HOME_TITLE' => $conf::HOME_TITLE,
 		 'HOME_URL' => $conf::HOME_URL,
 		 'FROM' => $conf::FROM,
-#		 'SCRIPT_NAME' => $q->script_name(),
+		 'SCRIPT_NAME' => "browse.cgi",
 		 'USER' => $user,
 		 'BASEDIR' => '..',
 		 'MYGROUP' => my_grouplist(),
@@ -53,7 +53,7 @@ sub my_grouplist() {
 	$retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=editgroup;groupid=$id\">[修正]</a></span></div>";
 	$retstr .= "<ul>\n";
 	foreach my $subid (@{$info{$id}->{'list'}}) {
-	    $retstr .= "<li><a href=\"./browse.cgi?id=$subid\">$subid</a>\n";
+	    $retstr .= "<li><a href=\"./browse.cgi?id=$subid\">" . util::get_dbname($subid) . "</a>\n";
 	    # $retstr .= "<span class=\"button\"><a href=\"./addgroup.cgi?cmd=delgroup;id=$subid\">[削除]</a></span>\n";
 	}
 	$retstr .= "</ul>\n";
@@ -68,7 +68,7 @@ sub my_dblist() {
 	die "tie fail: userid.db: $!";
     my @mydb = split(/,/, $hash{$user});
     foreach my $id (@mydb) {
-	$retstr .= "<li><a href=\"./browse.cgi?id=$id\">$id</a>\n";
+	$retstr .= "<li><a href=\"./browse.cgi?id=$id\">" . util::get_dbname($id) . "</a>\n";
     }
     return $retstr."</ul>";
 }
