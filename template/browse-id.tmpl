@@ -2,5 +2,7 @@
 <TMPL_INCLUDE NAME=header.tmpl>
 <hr>
 <TMPL_VAR NAME=CONTENT>
+<TMPL_IF NAME=USER>
 <div align="right"><a href="genform.cgi?id=<TMPL_VAR NAME=ID>">[更新]</a></div>
+</TMPL_IF>
 <TMPL_INCLUDE NAME=footer.tmpl>
