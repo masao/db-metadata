@@ -8,7 +8,7 @@
 </head>
 <body>
 <!-- hhmts start -->
-<div class="last-update">最終更新日: <strong>Wed Jun 12 00:04:20 2002</strong></div>
+<div class="last-update">最終更新日: <strong>Wed Jun 12 09:07:00 2002</strong></div>
 <!-- hhmts end -->
 <hr>
 <h1>セキュリティ上の注意点</h1>
@@ -23,7 +23,7 @@
   <li>ローカルマシンにログイン可能なユーザなら誰でも、
       CSVデータファイルを変更・削除・閲覧ができてしまいます。
       これを回避するためには、
-      ApacheならsuExec機能が必要で、特殊な設定を行う必要もあります。
+      <a href="http://httpd.apache.org/docs/suexec.html">ApacheのsuExec機能</a>が必要で、特殊な設定を行う必要もあります。
       なお、本CGIプログラムはsuExec環境での動作は未保証です。
   <li>ちょっとした知識があれば、本CGIスクリプトを大量に呼び出すような処理を
       自動化するスクリプトが書けます。
