@@ -111,7 +111,7 @@ sub main {
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
 		     'BASEDIR' => $BASEDIR,
-		     'SCRIPT_NAME' => $SCRIPT_NAME,
+#		     'SCRIPT_NAME' => $SCRIPT_NAME,
 		     'USER' => $user,
 		     'search' => $search,
 		     'search_result' => scalar @files,

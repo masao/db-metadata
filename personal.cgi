@@ -36,7 +36,7 @@ sub main {
 		 'HOME_TITLE' => $conf::HOME_TITLE,
 		 'HOME_URL' => $conf::HOME_URL,
 		 'FROM' => $conf::FROM,
-		 'SCRIPT_NAME' => "browse.cgi",
+#		 'SCRIPT_NAME' => "browse.cgi",
 		 'USER' => $user,
 		 'BASEDIR' => $BASEDIR,
 		 'ADDGROUP_FORM' => addgroup_form(),
