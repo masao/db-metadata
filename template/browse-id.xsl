@@ -30,10 +30,7 @@
         <td><xsl:value-of select="//field"/></td>
       </tr>
       <xsl:apply-templates select="//keyword" />
-      <tr>
-        <td bgcolor="#aaddaa">収録言語</td>
-        <td><xsl:value-of select="//lang"/></td>
-      </tr>
+      <xsl:apply-templates select="//lang" />
       <tr>
         <td bgcolor="#aaddaa">収録範囲</td>
         <td><xsl:value-of select="//period"/></td>
@@ -108,6 +105,14 @@
       </tr>
     
   </xsl:template>
+  <xsl:template match="//lang">
+      <tr>
+        <td bgcolor="#aaddaa">収録言語</td>
+        <td><xsl:value-of select="."/></td>
+      </tr>
+    
+  </xsl:template>
+  
   <xsl:template match="*">
     <tr><td><xsl:value-of select="name(.)"/></td><td><xsl:apply-templates/></td></tr>
   </xsl:template>
