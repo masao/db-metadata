@@ -233,6 +233,8 @@ sub param2form_update($@) {
 sub param2xml($) {
     my ($id) = @_;
     my $date = POSIX::strftime("%Y-%m-%dT%H:%M:%S", localtime());
+    my $access = util::escape_html($Q::access);
+
     $Q::created_date = $date
 	if !defined($Q::created_date) || !length($Q::created_date);
     my $xml = <<EOF;
@@ -263,7 +265,7 @@ EOF
   <interval_num>$Q::interval_num</interval_num>
   <region>$Q::region</region>
   <category/>
-  <access>$Q::access</access>
+  <access>$access</access>
 </database_metadata>
 EOF
     return $xml;
