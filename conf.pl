@@ -34,7 +34,7 @@ $ROOT_ELEMENT = 'データベース';
 
 # フォーム部品のラベル（名前）
 %PARAM_LABELS = ('user' => '登録者',
-		 'username' => '名前',
+		 'username' => '登録者名',
 		 'e-mail' => 'E-mail',# メール通知する場合は必要（宛先）
 		 'url' => 'URL',
 
