@@ -5,7 +5,7 @@
 use strict;
 use Test;
 
-BEGIN { plan test => 8 }
+BEGIN { plan test => 9 }
 
 my $cgi = "./browse.cgi";
 my @test_args =
@@ -14,6 +14,7 @@ my @test_args =
      "id=9354", # 最後のid
      "scan=keyword search=PC",
      "scan=keyword search=エネルギー page=1",
+     "scan=system",
      );
 
 foreach my $arg (@test_args) {
