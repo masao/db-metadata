@@ -4,22 +4,22 @@ package conf;
 ### 全般の設定
 
 # メッセージの言語（ja or en）
-$LANG = 'ja';
+$LANG = 'en';
 
 # 担当者のメールアドレス
 $FROM = 'yuka@ulis.ac.jp';
 
 # ページのタイトル
-$TITLE = 'データベース情報の登録/更新';
+$TITLE = 'Information Sharing Project for Databases';
 
 # ホームページの URL
 $HOME_URL = 'http://nile.ulis.ac.jp/~yuka/db-template/top.html';
 
 # ホームページのタイトル
-$HOME_TITLE = 'データベース情報共有プロジェクト';
+$HOME_TITLE = 'Database Information Sharing Project';
 
 # 必須項目を示すマーク（HTML）
-$REQ_MARK = '<small><font color="red">※</font></small>';
+$REQ_MARK = '<small><font color="red">*</font></small>';
 
 # 登録内容を記録するディレクトリ名: `chmod a+w $DATADIR`しておくこと。
 $DATADIR = 'data';
@@ -37,28 +37,28 @@ $ROOT_ELEMENT = 'データベース';
 
 # フォーム部品のラベル（名前）
 %PARAM_LABELS = (
-		 'id' =>  "データベースID",
-		 'source_id' =>  "派生元ID",
-		 'created_date' =>  "作成日",
-		 'update_date' =>  "更新日",
-		 'userid' =>  "ユーザID",
-		 'dbname' =>  "データベース名",
-		 'system' =>  "システム名",
-		 'condition' =>  "利用条件(料金、時間含む)",
-		 'format' =>  "データ提供形態",
-		 'contributor' =>  "コントリビュータ",
-		 'description' =>  "特徴",
-		 'subject' =>  "主題（分野、キーワード）",
-		 'type' =>  "対象とするデータ種別",
-		 'lang' =>  "言語",
-		 'period' =>  "収録期間",
-		 'total' =>  "収録件数",
-		 'interval' =>  "更新周期",
-		 'interval_num' =>  "更新件数",
-		 'region' =>  "対象地域",
-		 'category' =>  "カテゴリ",
-		 'access' =>  "アクセス先（URLなど）",
-		 'group', =>  "グループ名",
+		 'id' =>  "ID",
+		 'source_id' =>  "Source ID",
+		 'created_date' =>  "Created Date",
+		 'update_date' =>  "Updated Date",
+		 'userid' =>  "User ID",
+		 'dbname' =>  "Database Name",
+		 'system' =>  "System Name",
+		 'condition' =>  "Terms of Use",
+		 'format' =>  "Format",
+		 'contributor' =>  "Contributor",
+		 'description' =>  "Description",
+		 'subject' =>  "Subject (Area, Keywords)",
+		 'type' =>  "Data types",
+		 'lang' =>  "Language",
+		 'period' =>  "Covered Period",
+		 'total' =>  "Number of Total Records",
+		 'interval' =>  "Update Frequency",
+		 'interval_num' =>  "Number of Updated Records",
+		 'region' =>  "Region",
+		 'category' =>  "Category",
+		 'access' =>  "URL",
+		 'group', =>  "Group Name",
 		);
 
 # フォーム部品の表示順序、CVSファイルへの登録順も兼ねる
