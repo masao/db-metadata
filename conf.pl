@@ -150,12 +150,13 @@ $ROOT_ELEMENT = 'データベース';
 	       );
 
 # repeatable な入力項目
-%PARAM_REPEATABLES = ('keyword' => 1,
-		      'type' => 1,
-		      'lang' => 1,
-		      'publication' => 1,
-		      'service_type' => 1,
-		      'distribute_type' => 1,
+%PARAM_REPEATABLES = (
+		      "service_type" => 1,
+		      "distribute_type" => 1,
+		      "terminal_type" => 1,
+		      "keyword" => 1,
+		      "type" => 1,
+		      "lang" => 1,
 		     );
 
 ### 設定おわり
