@@ -29,10 +29,7 @@
         <td bgcolor="#aaddaa">分野</td>
         <td><xsl:value-of select="//field"/></td>
       </tr>
-      <tr>
-        <td bgcolor="#aaddaa">キーワード</td>
-        <td><xsl:value-of select="//keyword"/></td>
-      </tr>
+      <xsl:apply-templates select="//keyword" />
       <tr>
         <td bgcolor="#aaddaa">収録言語</td>
         <td><xsl:value-of select="//lang"/></td>
@@ -104,6 +101,13 @@
     </table>
   </xsl:template>
 
+  <xsl:template match="//keyword">
+      <tr>
+        <td bgcolor="#aaddaa">キーワード</td>
+        <td><xsl:value-of select="."/></td>
+      </tr>
+    
+  </xsl:template>
   <xsl:template match="*">
     <tr><td><xsl:value-of select="name(.)"/></td><td><xsl:apply-templates/></td></tr>
   </xsl:template>
