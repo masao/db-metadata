@@ -175,7 +175,7 @@ EOF
   <producer_yomi>$Q::producer_yomi</producer_yomi>
   <producer_country>$Q::producer_country</producer_country>
   <description>$Q::description</description>
-  <field><subfield>$Q::subfield</subfield></field>
+  <field><subfield>$Q::field</subfield></field>
 EOF
     $xml .= repeatable_tags("keyword");
     $xml .= repeatable_tags("type");
@@ -208,7 +208,7 @@ sub repeatable_tags($) {
     }
     return $xml;
 }
-    
+
 # 登録した内容を確認するために表示する
 sub param2report (@) {
     my (@parameters) = @_;
