@@ -5,7 +5,7 @@
 use strict;
 use CGI;
 use CGI::Carp 'fatalsToBrowser';
-use Text::ParseWords;
+use DirHandle;
 
 use lib ".";
 require 'util.pl';
@@ -25,8 +25,8 @@ my $BGCOLOR_HEAD = '#00A020';
 # URI らしき文字列に自動的にリンクを張る？
 my $USE_AUTOLINK = 1;
 
-# 表示する形式: table or list
-my $DISPLAY_MODE = 'list';
+# 一覧表示の際に表示すべき項目:  @conf::PARAMETERS で定義済の値を入れる
+my @DISPLAY_ELEMENTS = ('name', 'date');
 
 # CGIパラメータ
 my $q = new CGI;
@@ -36,7 +36,7 @@ my $search = CGI::escapeHTML($q->param('search')) || "";
 my $sort = CGI::escapeHTML($q->param('sort')) || 0;
 
 # 記録されているデータを保持する配列
-my @entries = ();
+my @files = ();
 
 main();
 sub main {
@@ -54,73 +54,54 @@ sub main {
 <hr>
 EOF
 
-    my $fh = util::fopen($conf::FILENAME);
-    my @lines = <$fh>;
-    chomp(@lines);
+    opendir(DIR, $conf::DATADIR) || die "opendir: $conf::DATADIR: $!";
+    @files = grep { /^\d+\.xml$/o } readdir(DIR);
+    closedir(DIR) || die "closedir: $!";
 
     if (length($search)) {	# 検索
-	@lines = grep(/$search/oi, @lines);
+	my @result = ();
+	for my $file (@files) {
+	    my $cont = util::readfile($file);
+	    push @result, $file if $cont =~ /$search/oi;
+	}
+	@files = @result;
 	print "<p>Perl で /$search/oi しています。grep -i とほぼ同じです。</p>";
- 	print "<p><font color=\"red\">検索結果: ", $#lines + 1, "件</font></p>\n";
+ 	print "<p><font color=\"red\">検索結果: ", $#files + 1, "件</font></p>\n";
     }
 
-    for my $line (@lines) {
-	my @tmp = quotewords(',', 0, $line);
-	push(@entries, \@tmp) if @tmp > 0;
-    }
-
-    my $sortby = 0;
-    $sortby = $1 if $sort =~ /(\d+)/;
-    @entries = sort { fncmp($a->[$sortby], $b->[$sortby]) } @entries;
-    @entries = reverse @entries if $sort =~ /r$/;
-
-    if ($DISPLAY_MODE eq 'table') {
-	print <<EOF;
+    print <<EOF;
 <table width="100%" border="1" bgcolor="$BGCOLOR">
 <tr bgcolor="$BGCOLOR_HEAD">
 EOF
-	for (my $i = 0; $i < @conf::PARAMETERS; $i++) {
-	    print <<EOF;
+    for (my $i = 0; $i < @DISPLAY_ELEMENTS; $i++) {
+	print <<EOF;
 <th>
-<a href="$SCRIPT_NAME?sort=$i;search=$search">$conf::PARAM_LABELS{$conf::PARAMETERS[$i]}</a>
+<a href="$SCRIPT_NAME?sort=$i;search=$search">$conf::PARAM_LABELS{$DISPLAY_ELEMENTS[$i]}</a>
 <a href="$SCRIPT_NAME?sort=${i}r;search=$search">(*)</a>
 </th>
 EOF
-	}
-	print "</tr>\n";
     }
+    print "</tr>\n";
 
-    for (my $i = $page * $MAX; $i < @entries && $i < ($page+1) * $MAX; $i++) {
-	print "<tr valign=\"top\">\n" if $DISPLAY_MODE eq 'table';
-	print "<table border=\"0\" bgcolor=\"$BGCOLOR\">\n"
-	    if $DISPLAY_MODE eq 'list';
-	my $col = 0;
-	for my $cont (@{$entries[$i]}) {
+    for (my $i = $page * $MAX; $i < @files && $i < ($page+1) * $MAX; $i++) {
+	print "<tr valign=\"top\">\n";
+	# print "<td><a href=\"$script_name/$i\">". $i+1 ."</a></td>\n";
+	my $cont = util::readfile("$conf::DATADIR/$files[$i]");
+	for my $elem (@DISPLAY_ELEMENTS) {
+	    my @tmp = ();
+	    my $tag = $conf::PARAM_LABELS{$elem};
+	    $cont =~ s#<$tag[^>]*>([^<]*)</$tag>#push(@tmp, $1)#e;
+	    $cont = join(",", @tmp);
 	    $cont =~ s/^\s+//g;
 	    $cont =~ s/\s+$//g;
 	    if ($USE_AUTOLINK) {
 		$cont =~ s#((https?|ftp)://[;\/?:@&=+\$,A-Za-z0-9\-_.!~*'()]+)#<a href="$1">$1</a>#gi;
 	    }
-	    if ($DISPLAY_MODE eq 'table') {
-		print "<td>$cont</td>\n";
-	    } elsif ($DISPLAY_MODE eq 'list') {
-		if (!length($cont)) {
-		    $col++;
-		    next;
-		}
-		print <<EOF;
-<tr>
-<th align="center" bgcolor="$BGCOLOR_HEAD">$conf::PARAM_LABELS{$conf::PARAMETERS[$col]}</th>
-<td>$cont</td>
-</tr>
-EOF
-	    }
-	    $col++;
+	    print "<td>$cont</td>\n";
 	}
-	print "</tr>\n" if $DISPLAY_MODE eq 'table';
-	print "</table><hr width=\"50%\">\n" if $DISPLAY_MODE eq 'list';
+	print "</tr>\n";
     }
-    print "</table>\n" if $DISPLAY_MODE eq 'table';
+    print "</table>\n";
     print_pages();
     print $conf::HTML_FOOTER;
 }
@@ -137,7 +118,7 @@ sub fncmp() {
 sub print_pages() {
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
     print "<p>ページ:\n";
-    for (my $i = 0; $i*$MAX < @entries; $i++) {
+    for (my $i = 0; $i*$MAX < @files; $i++) {
 	if ($i == $page) {
 	    print "[", $i+1, "]\n";
 	} else {
@@ -147,10 +128,8 @@ sub print_pages() {
     print "</p>\n";
 }
 
-
 # For avoiding "used only once: possible typo at ..." warnings.
-util::muda($conf::FILENAME,
-	   $conf::HTML_HEADER,
+util::muda($conf::HTML_HEADER,
 	   $conf::HTML_FOOTER,
 	   $conf::PARAM_LABELS,
 	  );
