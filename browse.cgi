@@ -20,12 +20,6 @@ my $MAX = 10;
 # 1ページに表示する件数
 my $MAX_PAGE = 20;
 
-# URI らしき文字列に自動的にリンクを張る？
-my $USE_AUTOLINK = 1;
-
-# 一覧表示の際に表示すべき項目:  @conf::PARAMETERS で定義済の値を入れる
-my @DISPLAY_ELEMENTS = ('username', 'date');
-
 # CGIパラメータ
 my $q = new CGI;
 my $SCRIPT_NAME = $q->script_name();
@@ -201,8 +195,4 @@ sub fncmp() {
 }
 
 # For avoiding "used only once: possible typo at ..." warnings.
-util::muda($conf::HOME_TITLE,
-	   $conf::HOME_URL,
-	   $conf::FROM,
-	   $conf::PARAM_LABELS,
-	  );
+# util::muda($conf::PARAM_LABELS);
