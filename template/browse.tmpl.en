@@ -1,0 +1,21 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl.en>
+<TMPL_IF NAME=SEARCH>
+<p><font color="red">Results: <TMPL_VAR NAME=search_result></font></p>
+</TMPL_IF>
+<table width="100%" border="1" bgcolor="#ddddd0">
+<tr bgcolor="#aaddaa">
+<th>ID</th>
+<th>Name</th>
+<th>Description</th>
+<th>Subject</th>
+</tr>
+<TMPL_VAR NAME="list_table">
+</table>
+
+<p>Pages:
+<TMPL_VAR NAME="list_page">
+</p>
+
+</td></table>
+<TMPL_INCLUDE NAME=footer.tmpl.en>

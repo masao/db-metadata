@@ -10,7 +10,7 @@ $LANG = 'en';
 $FROM = 'yuka@ulis.ac.jp';
 
 # ページのタイトル
-$TITLE = 'Information Sharing Project for Databases';
+$TITLE = 'Browsing System for Information about Databases';
 
 # ホームページの URL
 $HOME_URL = 'http://nile.ulis.ac.jp/~yuka/db-template/top.html';

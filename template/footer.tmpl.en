@@ -1,0 +1,8 @@
+<!-- -*- html-helper -*- -->
+<hr>
+<address>
+<a href="<TMPL_VAR NAME=HOME_URL>"><TMPL_VAR NAME=HOME_TITLE></a> /
+<a href="mailto:<TMPL_VAR NAME=FROM>"><TMPL_VAR NAME=FROM></a>
+</address>
+</body>
+</html>

@@ -1,11 +1,11 @@
 <!-- -*- html-helper -*- -->
-<TMPL_INCLUDE NAME=header.tmpl>
+<TMPL_INCLUDE NAME=header.tmpl.en>
 <ul>
 <TMPL_VAR NAME="scan_list">
 </ul>
 
-<p>¥Ú¡¼¥¸:
+<p>Pages:
 <TMPL_VAR NAME="list_page">
 </p>
 
-<TMPL_INCLUDE NAME=footer.tmpl>
+<TMPL_INCLUDE NAME=footer.tmpl.en>

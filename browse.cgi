@@ -43,12 +43,12 @@ sub main {
     print $q->header("text/html; charset=UTF-8");
 
     if (defined $id) {
-	my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse-id.tmpl");
-	my $content = exec_xslt("$conf::DATADIR/$id.xml", "$BASEDIR/template/browse-id.xsl");
+	my $tmpl = HTML::Template->new('filename' => util::template_fname("$BASEDIR/template/browse-id.tmpl"));
+	my $content = exec_xslt("$conf::DATADIR/$id.xml", util::template_fname("$BASEDIR/template/browse-id.xsl"));
 	my $updatable = 1 if
 	    defined($user) &&
 	    $user eq (util::get_tagvalues(util::readfile("$conf::DATADIR/$id.xml"), 'userid'))[0];
-	$tmpl->param('TITLE' => "データベース情報の閲覧",
+	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
@@ -64,14 +64,14 @@ sub main {
 	print $tmpl->output;
     } elsif (defined $scan) {
 	if (length($search)) {
-	    my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse-scan-search.tmpl");
+	    my $tmpl = HTML::Template->new('filename' => util::template_fname("$BASEDIR/template/browse-scan-search.tmpl"));
 	    my @files = get_scanned_files($scan, $search);
 	    my $description = "";
 	    if ($scan eq "group") {
 		my %group = util::get_groupinfo("$BASEDIR/group.txt");
 		$description = $group{$search}->{'description'};
 	    }
-	    $tmpl->param('TITLE' => "データベース情報の閲覧",
+	    $tmpl->param('TITLE' => $conf::TITLE,
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
 			 'FROM' => $conf::FROM,
@@ -89,7 +89,7 @@ sub main {
 	    print $tmpl->output;
 	} else {
 	    my @list = get_scan_list();
-	    my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse-scan.tmpl");
+	    my $tmpl = HTML::Template->new('filename' => util::template_fname("$BASEDIR/template/browse-scan.tmpl"));
 	    $tmpl->param('TITLE' => "$conf::PARAM_LABELS{$scan} 一覧",
 			 'HOME_TITLE' => $conf::HOME_TITLE,
 			 'HOME_URL' => $conf::HOME_URL,
@@ -102,11 +102,11 @@ sub main {
 	    print $tmpl->output;
 	}
     } else {
-	my $tmpl = HTML::Template->new('filename' => "$BASEDIR/template/browse.tmpl");
+	my $tmpl = HTML::Template->new('filename' => util::template_fname("$BASEDIR/template/browse.tmpl"));
 	my @files = reverse util::pickup_files();
 	@files = do_search(@files);
 
-	$tmpl->param('TITLE' => "データベース情報の閲覧",
+	$tmpl->param('TITLE' => $conf::TITLE,
 		     'HOME_TITLE' => $conf::HOME_TITLE,
 		     'HOME_URL' => $conf::HOME_URL,
 		     'FROM' => $conf::FROM,
@@ -256,7 +256,7 @@ sub list_table(@) {
 	my $id = $files[$i];
 	$id =~ s/\.xml$//g;
 	$retstr .= exec_xslt("$conf::DATADIR/$files[$i]",
-			     "$BASEDIR/template/list.xsl",
+			     util::template_fname("$BASEDIR/template/list.xsl"),
 			     ('id' => "'$id'"));
     }
     return $retstr;
@@ -266,7 +266,7 @@ sub list_pages(@) {
     my (@files) = @_;
     my $base_url = "$SCRIPT_NAME?sort=$sort;search=$search";
     $base_url .= ";scan=$scan" if defined $scan;
-    my $retstr = "<p>ページ:\n";
+    my $retstr = "";
 
     my $start = $page - $MAX_PAGE/2;
     $start = 0 if $start < 0;
@@ -285,7 +285,6 @@ sub list_pages(@) {
 	my $max = int($#files/$MAX);
 	$retstr .= " ... <a href=\"$base_url;page=$max\">[". ($max+1) ."]</a>";
     }
-    $retstr .= "</p>\n";
     return $retstr;
 }
 

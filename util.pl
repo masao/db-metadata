@@ -17,6 +17,20 @@ sub pickup_files() {
     return @files;
 }
 
+# 言語（$conf::LANG）を考慮して、テンプレートファイル名を展開する
+sub template_fname($) {
+    my ($fname) = @_;
+
+    if (-r "$fname.$conf::LANG") {
+	return "$fname.$conf::LANG";
+    } elsif (-r "$fname") {
+	return "$fname";
+    } else {
+	warn "Can't read $fname";
+	return "$fname";
+    }
+}
+
 # データベース名を取出してくる
 sub get_dbname($) {
     my ($id) = @_;

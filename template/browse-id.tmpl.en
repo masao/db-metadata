@@ -1,0 +1,17 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl.en>
+<div><a href="<TMPL_VAR NAME=BASEDIR>/data/<TMPL_VAR NAME=ID>.xml"><TMPL_VAR NAME=ID>.xml</a></div>
+<TMPL_VAR NAME=CONTENT>
+<TMPL_IF NAME=UPDATABLE>
+<div align="right"><a href="update.cgi?id=<TMPL_VAR NAME=ID>">[Update]</a></div>
+</TMPL_IF>
+<TMPL_IF NAME=USER>
+<div align="right"><a href="update.cgi?include=<TMPL_VAR NAME=ID>">[Import]</a></div>
+<div align="right"><TMPL_VAR NAME=ADDGROUP-FORM></div>
+</TMPL_IF>
+<TMPL_VAR NAME=GROUP-LIST>
+<TMPL_IF NAME=USER>
+<TMPL_INCLUDE NAME=bbs-form.tmpl.en>
+</TMPL_IF>
+<TMPL_VAR NAME=BBS-LIST>
+<TMPL_INCLUDE NAME=footer.tmpl.en>

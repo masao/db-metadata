@@ -1,0 +1,24 @@
+<!-- -*- html-helper -*- -->
+<TMPL_INCLUDE NAME=header.tmpl.en>
+<div class="scan-list">
+<a href="<TMPL_VAR NAME="SCRIPT_NAME">?scan=<TMPL_VAR NAME="scan">"><TMPL_VAR NAME="scanstr"></a> &gt;
+<strong><TMPL_VAR NAME="search"></strong>
+<span class="description"><TMPL_VAR NAME="description"></span>
+</div>
+<p><TMPL_VAR NAME="search_result"> DBs found: </font></p>
+
+<table width="100%" border="1" bgcolor="#ddddd0">
+<tr bgcolor="#aaddaa">
+<th>ID</th>
+<th>Name</th>
+<th>Description</th>
+<th>Subject</th>
+</tr>
+<TMPL_VAR NAME="list_table">
+</table>
+
+<p>Pages:
+<TMPL_VAR NAME="list_page">
+</p>
+
+<TMPL_INCLUDE NAME=footer.tmpl.en>

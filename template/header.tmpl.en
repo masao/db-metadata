@@ -1,0 +1,53 @@
+<!-- -*- html-helper -*- -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><TMPL_VAR NAME=TITLE></title>
+<link rel="stylesheet" href="<TMPL_VAR NAME=BASEDIR>/default.css" type="text/css">
+</head>
+<body>
+<div class="navbar">
+<a href="./browse.cgi">[Top]</a>
+<TMPL_IF NAME=USER>
+<a href="./update.cgi">[New Record]</a>
+<TMPL_ELSE>
+<a href="./member/">[Login]</a>
+</TMPL_IF>
+</div>
+<h1><TMPL_VAR NAME=TITLE></h1>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+<tr valign="top">
+<td nowrap>
+  <ul>
+    <li><a href="./browse.cgi?scan=userid">List of Users</a>
+    <li><a href="./browse.cgi?scan=group">List of Groups</a>
+    <li><a href="./browse.cgi?scan=subject">List of Subjects</a>
+    <li><a href="./browse.cgi?scan=dbname">List of Databases</a>
+    <li><a href="./browse.cgi?scan=system">List of Systems</a>
+    <li><a href="./browse.cgi?scan=contributor">List of Contributors</a>
+</td>
+<td align="right">
+<div class="search-form">
+<form method="GET" action="./browse.cgi">
+<select name="field">
+  <option value="">Full-text</option>
+  <option value="dbname">database name</option>
+  <option value="system">system name</option>
+  <option value="contributor">contributor name</option>
+  <option value="userid">userid</option>
+  <option value="subject">subject</option>
+  <option value="group">group</option>
+</select>
+<input type="text" name="search" value="<TMPL_VAR NAME="search">" size="40">
+<input type="hidden" name="sort" value="<TMPL_VAR NAME="sort">">
+<input type="submit" value=" Search ">
+</form>
+</div>
+<TMPL_IF NAME=USER>
+<div><a href="./personal.cgi">To <TMPL_VAR NAME=USER>'s page</a></div>
+</TMPL_IF>
+</td>
+</table>
+<hr>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+
+  <xsl:output method="html" encoding="UTF-8"/>
+
+  <xsl:template match="/">
+    <table bgcolor="#ddddd0" border="2" cellpadding="2">
+      <tr>
+        <td bgcolor="#aaddaa">ID</td>
+        <td>
+          <xsl:value-of select="//id"/>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#aaddaa">Database</td>
+        <td>
+          <a href="browse.cgi?scan=dbname;search={//dbname}"><xsl:value-of select="//dbname"/></a>
+          <xsl:if test="//dbname_yomi and boolean(string-length(//dbname_yomi))">
+            （<xsl:value-of select="//dbname_yomi"/>）
+          </xsl:if>
+        </td>
+      </tr>
+      <xsl:if test="boolean(string-length(//description))">
+        <tr>
+          <td bgcolor="#aaddaa">Description</td>
+          <td><xsl:value-of select="//description"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//subject))">
+        <xsl:apply-templates select="//subject" />
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//lang))">
+        <xsl:apply-templates select="//lang" />
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//period))">
+        <tr>
+          <td bgcolor="#aaddaa">Covered Period</td>
+          <td><xsl:value-of select="//period"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//total))">
+        <tr>
+          <td bgcolor="#aaddaa">Number of Total Records</td>
+          <td><xsl:value-of select="//total"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//interval))">
+        <tr>
+          <td bgcolor="#aaddaa">Update Frequency</td>
+          <td><xsl:value-of select="//interval"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//interval_num))">
+        <tr>
+          <td bgcolor="#aaddaa">Number of Updated Records</td>
+          <td><xsl:value-of select="//interval_num"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//region))">
+        <tr>
+          <td bgcolor="#aaddaa">Region</td>
+          <td><xsl:value-of select="//region"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//system))">
+        <tr>
+          <td bgcolor="#aaddaa">System</td>
+          <td>
+            <a href="browse.cgi?scan=system;search={//system}">
+              <xsl:value-of select="//system"/></a>
+              <xsl:if test="//system_yomi and boolean(string-length(//system_yomi))">
+                （<xsl:value-of select="//system_yomi"/>）
+            </xsl:if>
+          </td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//access))">
+        <tr>
+          <td bgcolor="#aaddaa">URL</td>
+          <td>
+            <xsl:if test="boolean(string-length(//access))">
+              <a href="{//access}"><xsl:value-of select="//access"/></a>
+            </xsl:if>
+          </td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//condition))">
+        <tr>
+          <td bgcolor="#aaddaa">Terms of Use</td>
+          <td><xsl:value-of select="//condition"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//format))">
+        <tr>
+          <td bgcolor="#aaddaa">Format</td>
+          <td><xsl:value-of select="//format"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="boolean(string-length(//contributor))">
+        <xsl:apply-templates select="//contributor" />
+      </xsl:if>
+      <tr>
+        <td bgcolor="#aaddaa">User ID</td>
+        <td>
+          <a href="personal.cgi?userid={//userid}"><xsl:value-of select="//userid"/></a>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#aaddaa">Created Date</td>
+        <td>
+          <xsl:value-of select="//created_date"/>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#aaddaa">Updated Date</td>
+        <td>
+          <xsl:value-of select="//update_date"/>
+        </td>
+      </tr>
+    </table>
+    <xsl:if test="boolean(string-length(//source_id))">
+      <p>
+        This information is derived from <a href="browse.cgi?id={//source_id}"><xsl:value-of select="//source_id"/></a>.
+    </p>
+  </xsl:if>  
+    </xsl:template>
+  <xsl:template match="//contributor">
+      <tr>
+        <td bgcolor="#aaddaa">Contributor</td>
+        <td><a href="browse.cgi?scan=contributor;search={.}"><xsl:value-of select="."/></a></td>
+      </tr>
+    
+  </xsl:template>
+  <xsl:template match="//subject">
+      <tr>
+        <td bgcolor="#aaddaa">Subjects</td>
+        <td><a href="browse.cgi?scan=subject;search={.}"><xsl:value-of select="."/></a></td>
+      </tr>
+    
+  </xsl:template>
+  <xsl:template match="//lang">
+      <tr>
+        <td bgcolor="#aaddaa">Language</td>
+        <td><xsl:value-of select="."/></td>
+      </tr>
+    
+  </xsl:template>
+  
+  <xsl:template match="*">
+    <tr><td><xsl:value-of select="name(.)"/></td><td><xsl:apply-templates/></td></tr>
+  </xsl:template>
+</xsl:stylesheet>

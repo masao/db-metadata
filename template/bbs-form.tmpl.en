@@ -1,0 +1,9 @@
+<!-- -*- html-helper -*- -->
+<div class="bbs-form">
+<form action="bbs.cgi" method="POST">
+You can add your comments for this DB.<br>
+<textarea name="comment" rows="3" cols="80"></textarea><br>
+<input type="hidden" name="id" value="<TMPL_VAR NAME=ID>">
+<input type="submit" value=" Submit ">
+</form>
+</div>
