@@ -117,12 +117,18 @@ sub scan_list($) {
     my %hash = ();
     tie(%hash, 'DB_File', "$dbname.db", O_RDONLY) ||
 	die "tie fail: $dbname.db: $!";
-    foreach my $key (sort keys %hash) {
-	my @id = split(/,/, $hash{$key});
+    foreach my $key (sort { count_num($hash{$b}) <=> count_num($hash{$a})
+				|| $a cmp $b } keys %hash) {
 	$result .= "<li><a href=\"$SCRIPT_NAME?search=$key;scan=$dbname\">$key</a>";
-	$result .= "(". scalar(@id) .")\n";
+	$result .= " (". count_num($hash{$key}) .")\n";
     }
     return $result;
+}
+
+sub count_num($) {
+    my ($str) = @_;
+    my @tmp = split(/,/, $str);
+    return scalar @tmp;
 }
 
 # scan+search条件に合致するファイル名を返す。
