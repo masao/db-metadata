@@ -52,6 +52,7 @@ $ROOT_ELEMENT = 'データベース';
 
 		 'description' => 'データベースの特徴',
 		 'field' => '分野',
+		 'subfield' => '分野',
 		 'keyword' => 'キーワード',
 		 'type' => 'データのタイプ',
 		 'publication' => '冊子体名',

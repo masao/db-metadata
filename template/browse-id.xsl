@@ -29,7 +29,8 @@
         <td bgcolor="#aaddaa">分野</td>
         <xsl:choose>
           <xsl:when test="//subfield">
-            <td><xsl:value-of select="//field/@label"/>(<xsl:value-of select="//field/subfield"/>)</td>
+            <td><xsl:value-of select="//field/@label"/>
+            <a href="browse.cgi?scan=subfield;search={//field/subfield}">(<xsl:value-of select="//field/subfield"/>)</a></td>
             
           </xsl:when>
           <xsl:otherwise>
