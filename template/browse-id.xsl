@@ -16,7 +16,7 @@
         <td bgcolor="#aaddaa">データベース</td>
         <td>
           <a href="browse.cgi?scan=dbname;search={//dbname}"><xsl:value-of select="//dbname"/></a>
-          <xsl:if test="//dbname_yomi">
+          <xsl:if test="//dbname_yomi and boolean(string-length(//dbname_yomi))">
             （<xsl:value-of select="//dbname_yomi"/>）
           </xsl:if>
         </td>
@@ -64,7 +64,7 @@
         <td>
           <a href="browse.cgi?scan=system;search={//system}">
           <xsl:value-of select="//system"/></a>
-          <xsl:if test="//system_yomi">
+          <xsl:if test="//system_yomi and boolean(string-length(//system_yomi))">
             （<xsl:value-of select="//system_yomi"/>）
           </xsl:if>
         </td>
@@ -82,7 +82,7 @@
         <td>
           <a href="browse.cgi?scan=producer;search={//producer}">
             <xsl:value-of select="//producer"/></a>
-          <xsl:if test="//producer_yomi">
+          <xsl:if test="//producer_yomi and boolean(string-length(//producer_yomi))">
             （<xsl:value-of select="//producer_yomi"/>）
           </xsl:if>
         </td>
@@ -92,7 +92,7 @@
         <td>
           <a href="browse.cgi?scan=distributor;search={//distributor}">
             <xsl:value-of select="//distributor"/></a>
-          <xsl:if test="//distributor_yomi">
+          <xsl:if test="//distributor_yomi and boolean(string-length(//distributor_yomi))">
             （<xsl:value-of select="//distributor_yomi"/>）
           </xsl:if>
         </td>
