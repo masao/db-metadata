@@ -8,4 +8,7 @@
 <link rel="stylesheet" href="default.css" type="text/css">
 </head>
 <body>
+<TMPL_UNLESS NAME=USER>
+<div class="login"><a href="./member/">[ログイン]</a></div>
+</TMPL_UNLESS>
 <h1><TMPL_VAR NAME=TITLE></h1>

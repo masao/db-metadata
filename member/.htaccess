@@ -1,0 +1,11 @@
+#パスワードファイルの指定。絶対パスで書く。
+AuthUserFile	/home/masao/CVSwork/db-metadata/member/.htpasswd
+
+#単純なパスワードによる認証
+AuthType Basic
+
+#ユーザ認証ウィンドウに表示されるタイトル
+AuthName "Member's area"
+
+#認証したいユーザ名を記入。複数人の場合はスペースで区切る。
+require valid-user
