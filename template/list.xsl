@@ -20,10 +20,16 @@
         </xsl:choose>
 
       </td>
-      <td><xsl:apply-templates select="//subject" /></td>
+      <td>
+      <xsl:apply-templates select="//subject">
+        <xsl:sort select="." data-type="text" order="ascending" />
+      </xsl:apply-templates>
+      </td>
     </tr>
   </xsl:template>
   <xsl:template match="//subject">
-    <xsl:value-of select="."/>;
+    <xsl:if test="string-length(.) != 0">
+      <xsl:value-of select="."/>;
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
