@@ -8,12 +8,12 @@
 <link rel="stylesheet" href="<TMPL_VAR NAME=BASEDIR>/default.css" type="text/css">
 </head>
 <body>
+<div class="navbar">
+<a href="./browse.cgi">[トップ]</a>
 <TMPL_IF NAME=USER>
-<div class="update">
-<a href="browse.cgi">[トップ]</a>
 <a href="./update.cgi">[新規登録]</a>
-</div>
 <TMPL_ELSE>
-<div class="login"><a href="./member/">[ログイン]</a></div>
+<a href="./member/">[ログイン]</a>
 </TMPL_IF>
+</div>
 <h1><TMPL_VAR NAME=TITLE></h1>
